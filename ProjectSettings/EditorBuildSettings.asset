@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/AAA-UI-AAA/LogoAnimation/LogoAnimation.unity
+    path: Assets/Scenes/LogoAnimation.unity
     guid: f7a8f7026c40847fba375b9294eafa71
   - enabled: 1
     path: Assets/Scenes/Dialogue Scene.unity
