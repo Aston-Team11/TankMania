@@ -21,6 +21,7 @@ public class Manager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject MySpawners;
     [SerializeField] private float SpawnTimer;
     [SerializeField] private GameObject[] players;
+    private AudioSource bgMusic;
 
     /// <summary>
     /// @author Riyad K Rahman
@@ -30,6 +31,7 @@ public class Manager : MonoBehaviourPunCallbacks
     private void Start()
     {
         var target = SpawnPlayer();
+        bgMusic = GetComponent<AudioSource>();
         //SpawnZombie(target);
     }
 
