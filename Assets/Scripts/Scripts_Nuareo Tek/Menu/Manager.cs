@@ -69,7 +69,7 @@ public class Manager : MonoBehaviourPunCallbacks
         else
         {
             //used for spawning host
-            newplayer = PhotonNetwork.Instantiate("Player_4", SpawnPoint.position, SpawnPoint.rotation);
+            newplayer = PhotonNetwork.Instantiate("Player_1", SpawnPoint.position, SpawnPoint.rotation);
         }
 
         newplayer.name = newplayer.GetPhotonView().ViewID.ToString();
