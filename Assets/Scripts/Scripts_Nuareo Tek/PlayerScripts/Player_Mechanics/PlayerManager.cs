@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private int isPoision; //used to check if poison damage should be appl
 
     [SerializeField] private int lives;         // number of player lives 
-    [SerializeField] private GameObject Balloon; // used for nimating respawn
+    [SerializeField] private GameObject Balloon; // used for animating respawn
     private bool respawning = false;            //used for controlling respawn
     private Vector3 descend = new Vector3(0f, -5f, 0f);
 
@@ -115,7 +115,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             {
                 photonView.RPC("spawnShield", RpcTarget.AllBufferedViaServer);
             }
-
         }
 
         updateHealth();
@@ -297,7 +296,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public void PosionDamage()
     {
-        if(poision == true)
+        if(isPoision > 0)
         {
             DamagePlayer(0.05f);
         }
@@ -339,9 +338,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             isPoision++;
             StartCoroutine(endPoison());
         }
-        else
+        else if(isPoision > 0)
         {
-            StopCoroutine(endPoison());
+            isPoision--;
+            //StopCoroutine(endPoison());
         }
 
     }
@@ -354,10 +354,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     IEnumerator endPoison()
     {
         yield return new WaitForSeconds(9f);
-        if (isPoision > 1)
+        if (isPoision > 0)
         {
             poision = false;
-            isPoision = 0;
+            isPoision --;
         }
     }
 
