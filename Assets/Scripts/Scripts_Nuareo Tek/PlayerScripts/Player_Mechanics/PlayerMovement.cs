@@ -18,7 +18,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     public Vector2 direction;
   
     public GameObject parentCam;
-
+    [SerializeField] private AudioSource engine;
+    [SerializeField] private float audioOffset; 
  
 
     private void Start()
@@ -70,8 +71,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         // check if player view is this player
         if (!photonView.IsMine) return;
 
-        // apply forward/backward force and roational forces dependent on user input 
+        // apply forward/backward force dependent on user input 
         rb.AddForce(transform.forward * direction.x * acceleration);
+
+        // engine revving sound 
+        float result = Mathf.Lerp(0f, rb.velocity.magnitude * 1.09f , 0.1f);
+        engine.pitch = result + audioOffset;
+
+
+        //rotation
         rb.AddTorque(transform.up * torqueForce * direction.y);
 
         //check if time has been changed, adjust acceleration if time is slowed

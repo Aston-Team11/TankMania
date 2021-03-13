@@ -48,19 +48,19 @@ public class Manager : MonoBehaviourPunCallbacks
         if (!(photonView.IsMine))
         {
             //sets different colour presets for each tank
-            if (!(GameObject.Find("Player_2")))
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
                 newplayer = PhotonNetwork.Instantiate("Player_2", SpawnPoint.position, SpawnPoint.rotation);
             }
-            else if (!(GameObject.Find("Player_3")))
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
                 newplayer = PhotonNetwork.Instantiate("Player_3", SpawnPoint.position, SpawnPoint.rotation);
             }
             else
             {
                 newplayer = PhotonNetwork.Instantiate("Player_4", SpawnPoint.position, SpawnPoint.rotation);
+              
             }
-            
             //kills clones 
             photonView.RPC("KillMePlz", RpcTarget.OthersBuffered, newplayer.GetPhotonView().ViewID);
            
@@ -71,7 +71,6 @@ public class Manager : MonoBehaviourPunCallbacks
             //used for spawning host
             newplayer = PhotonNetwork.Instantiate("Player_1", SpawnPoint.position, SpawnPoint.rotation);
         }
-
 
         newplayer.name = newplayer.GetPhotonView().ViewID.ToString();
         newplayer.SendMessage("setTimeObject", time);

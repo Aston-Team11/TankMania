@@ -45,7 +45,7 @@ public class Spawner : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        //set base vlaues of this class
+        //set base values of this class
         waveNumber = 1;
         enemySpawnAmount = 5;
         enemiesKilled = 0;
@@ -93,14 +93,23 @@ public class Spawner : MonoBehaviourPunCallbacks
     private void NextWave()
     {
         waveNumber++;
-        enemySpawnAmount += 5;
-        enemiesKilled = 0;
-        photonView.RPC("SyncWave", RpcTarget.OthersBuffered, waveNumber);
-
-        for (int i = 0; i < enemySpawnAmount; i++)
+        //!!!! get rid of if statment ( if it causes issues
+        if(waveNumber < 9)
         {
-            SpawnEnemy();        
+            enemySpawnAmount += 5;
+            enemiesKilled = 0;
+            photonView.RPC("SyncWave", RpcTarget.OthersBuffered, waveNumber);
+
+            for (int i = 0; i < enemySpawnAmount; i++)
+            {
+                SpawnEnemy();
+            }
         }
+        else
+        {
+
+        }
+       
     }
 
    

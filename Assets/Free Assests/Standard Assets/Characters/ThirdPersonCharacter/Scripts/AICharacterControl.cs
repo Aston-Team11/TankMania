@@ -119,20 +119,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void Update()
         {
             DistanceCalculator();
-
-           // //if there are no valid targets, player has disconnected or died so we should reset the target
-           // if (target == null)
-           // {
-           //     GameObject player = GameObject.FindGameObjectWithTag("Player");
-           //     //check if player is alive
-           //     if (player.activeSelf == true)
-           //     {
-           //         target = player.transform;
-           //     }
-           //
-           //     else { return; }
-           // }
-            
+        
             //sets the target
             agent.SetDestination(target.position);
 
