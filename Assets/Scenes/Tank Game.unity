@@ -1561,7 +1561,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -9264,6 +9264,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: zombie (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 306437902164725578, guid: 5d850dffc43bc6c409fdeedd98967743,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
     - target: {fileID: 306437902164725582, guid: 5d850dffc43bc6c409fdeedd98967743,
         type: 3}
       propertyPath: target
@@ -12667,6 +12672,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: zombie (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 306437902164725578, guid: 5d850dffc43bc6c409fdeedd98967743,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
     - target: {fileID: 306437902164725582, guid: 5d850dffc43bc6c409fdeedd98967743,
         type: 3}
       propertyPath: target
@@ -18508,6 +18518,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: zombie (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 306437902164725578, guid: 5d850dffc43bc6c409fdeedd98967743,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
     - target: {fileID: 306437902164725582, guid: 5d850dffc43bc6c409fdeedd98967743,
         type: 3}
       propertyPath: target
@@ -21596,6 +21611,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: zombie (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 306437902164725578, guid: 5d850dffc43bc6c409fdeedd98967743,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
     - target: {fileID: 306437902164725582, guid: 5d850dffc43bc6c409fdeedd98967743,
         type: 3}
       propertyPath: target
@@ -25225,6 +25245,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: zombie
       objectReference: {fileID: 0}
+    - target: {fileID: 306437902164725578, guid: 5d850dffc43bc6c409fdeedd98967743,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
     - target: {fileID: 306437902164725582, guid: 5d850dffc43bc6c409fdeedd98967743,
         type: 3}
       propertyPath: target

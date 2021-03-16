@@ -20,6 +20,7 @@ public class bounce : MonoBehaviourPunCallbacks
     private bool beginDestroy = false;
 
     private int counter = 0;
+    private float multiplier = 1;
 
     /// <summary>
     /// @author Riyad K Rahman
@@ -53,7 +54,7 @@ public class bounce : MonoBehaviourPunCallbacks
 
         if (dissolve > -0.9f && disabled == false)
         {
-            dissolve -= 0.1f;
+            dissolve -= 0.1f * multiplier;
             mat.SetFloat("Vector1_F9FC2739", dissolve);
         }
         else
@@ -129,7 +130,9 @@ public class bounce : MonoBehaviourPunCallbacks
             Debug.Log("bullet impact");
             GameObject.Find("TimeManager").GetComponent<AudioSource>().Play();
             //photonView.RPC("Explode", RpcTarget.All);
-            Explode();
+            //Explode();
+            multiplier = 0.5f;
+            beginDestroy = true;
 
         }
 
@@ -234,16 +237,6 @@ public class bounce : MonoBehaviourPunCallbacks
     {
         return playerOwner; 
     }
-
-   ///// <summary>
-   ///// the bullets are destroyed only by the client who spawned it in 
-   ///// </summary>
-   //[PunRPC]
-   //public void ServerMessage()
-   //{
-   //    this.gameObject.SetActive(false);
-   //}
-
 
     /// <summary>
     /// when the game obkject is disabeld it will destroy itself

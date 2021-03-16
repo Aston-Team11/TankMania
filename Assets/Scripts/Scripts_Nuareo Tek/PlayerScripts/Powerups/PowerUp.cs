@@ -30,11 +30,11 @@ public class PowerUp : MonoBehaviourPunCallbacks
     /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Rocket")
         {
             Debug.Log("givePowerUp");
             activatePowerUp(collision.gameObject.GetComponent<bounce>().getplayer());
-            photonView.RPC("Explode", RpcTarget.All);
+            photonView.RPC("Explode", RpcTarget.AllBuffered);
         }
 
     }
@@ -88,6 +88,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
                 player.SendMessage("PowerupAttained", "SHIELD");
                 Debug.Log("SENT SHIELD");
                 break;
+
             default:
                 print("ErROR No PoWEr uP FouNd");
                 break;
