@@ -41,18 +41,18 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public IEnumerator roomCreate()
     {
-        yield return new WaitForSeconds(2); // Waits for one second before calling CreateRoom()
+        yield return new WaitForSeconds(3); // Waits for one second before calling CreateRoom()
         CreateRoom();
     }
 
     public IEnumerator JoinRoom()
     {
-        yield return new WaitForSeconds(2); // Waits for one second before calling CreateRoom()
+        yield return new WaitForSeconds(3); // Waits for one second before calling CreateRoom()
         PhotonNetwork.JoinRoom(roomName);
     }
     public IEnumerator AwakeDelay()
     {
-        yield return new WaitForSeconds(2); // Waits
+        yield return new WaitForSeconds(3); // Waits
         PhotonNetwork.AutomaticallySyncScene = true; // Sets options to always sync the scene to who is the Master client (Host)
         PhotonNetwork.GameVersion = "1.5.4";
     }

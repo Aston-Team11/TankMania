@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
@@ -33,12 +34,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject Balloon; // used for animating respawn
     private bool respawning = false;            //used for controlling respawn
     private Vector3 descend = new Vector3(0f, -5f, 0f);
+    [SerializeField] private GameObject livesText;
+    [SerializeField] private GameObject shieldPic, slowMoPic;
 
 
-   //when player enters smoke, increment posion counter
-   //when player leaves/ 9 seconds are up decrement counter 
-   //if counter less than 0, counter = 0;
-   //whne counter is not 0, posion player.
+    //when player enters smoke, increment posion counter
+    //when player leaves/ 9 seconds are up decrement counter 
+    //if counter less than 0, counter = 0;
+    //whne counter is not 0, posion player.
 
 
     public void Start()
@@ -114,10 +117,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             if (!(shield.activeSelf))
             {
                 photonView.RPC("spawnShield", RpcTarget.AllBufferedViaServer);
+                displayShield(false);
             }
         }
 
         updateHealth();
+        setLivesText();
 
     }
 
@@ -263,12 +268,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public void PowerupAttained(string powerType)
     {
-        Debug.Log(powerUpType);
-        //reset power type
-        //powerUpType = "";
-
-        //if (powerType.Contains(playerID))
+        displayShield(false);
+        displaySlowMo(false);
         powerUpType = powerType;
+        if (powerUpType == "SHIELD") {
+            displayShield(true);
+        }
+        else if(powerUpType == "SLOMO") {
+            displaySlowMo(true);
+        }
     }
 
    
@@ -302,7 +310,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public int GetTeamLives()
+    public int GetPlayerLives()
     {
         return lives;
     }
@@ -359,6 +367,18 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             poision = false;
             isPoision --;
         }
+    }
+
+    public void setLivesText() {
+        livesText.GetComponent<Text>().text = lives.ToString();
+    }
+
+    public void displayShield(bool state) {
+        shieldPic.SetActive(state);
+    }
+
+    public void displaySlowMo(bool state) {
+        slowMoPic.SetActive(state);
     }
 
 

@@ -7,21 +7,17 @@ public class ZombiesRemaining : MonoBehaviour
 {
     private Text zombiesRemaining;
 
-    private int remaining;
-    GameObject spawner;
-
     // Start is called before the first frame update
     void Start()
     {
-        spawner = GameObject.Find("Spawners");
         zombiesRemaining = GetComponent<Text>() as Text;
     }
 
     // Update is called once per frame
     void Update()
     {
-        remaining = spawner.GetComponent<Spawner>().getRemaining();
-        zombiesRemaining.text = remaining.ToString();
+        GameObject[] list = GameObject.FindGameObjectsWithTag("Enemy");
+        zombiesRemaining.text = list.Length.ToString();
     }
 }
 
