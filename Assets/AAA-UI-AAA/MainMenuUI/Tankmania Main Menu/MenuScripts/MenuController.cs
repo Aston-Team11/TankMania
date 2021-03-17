@@ -76,14 +76,13 @@ namespace SpeedTutorMainMenuSystem
         public void PlayGame()
         {
              Launcher.GetComponent<Launcher>().OnClickCreate(); // Call on new game click in launcher
-
         }
         public void LoadGame()
         {
             roomName = GameObject.Find("InputField").GetComponent<TMP_InputField>();
             Launcher.GetComponent<Launcher>().OnClickJoin(roomName.text.ToUpper()); // Call on join button press in launcher
         }
- 
+
         // Main Section
         public IEnumerator ConfirmationBox()
         {
