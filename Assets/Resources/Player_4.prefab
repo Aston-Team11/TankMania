@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 9104955914963667119}
   - component: {fileID: 3967039493166876353}
   - component: {fileID: 5103254936147952690}
-  - component: {fileID: 2365351538955478635}
+  - component: {fileID: 9185944529071907078}
   m_Layer: 8
   m_Name: Player_4
   m_TagString: Player
@@ -408,7 +408,7 @@ MonoBehaviour:
   direction: {x: 0, y: 0}
   parentCam: {fileID: 2308331000217148019, guid: f676883ed7f6e2041a1566858f2f4739,
     type: 3}
-  engine: {fileID: 2365351538955478635}
+  engine: {fileID: 9185944529071907078}
   audioOffset: 1
 --- !u!114 &6977848982678568046
 MonoBehaviour:
@@ -493,8 +493,7 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
-<<<<<<< Updated upstream
---- !u!82 &2365351538955478635
+--- !u!82 &9185944529071907078
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -506,9 +505,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: a1f4c76d2959e49469a40296466e1e47, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -590,10 +589,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &1397161024220358507
-=======
 --- !u!1 &1324395312231830707
->>>>>>> Stashed changes
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -53,7 +53,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public IEnumerator AwakeDelay()
     {
         yield return new WaitForSeconds(3); // Waits
-        PhotonNetwork.AutomaticallySyncScene = true; // Sets options to always sync the scene to who is the Master client (Host)
+        //PhotonNetwork.AutomaticallySyncScene = true; // Sets options to always sync the scene to who is the Master client (Host)
         PhotonNetwork.GameVersion = "1.5.4";
     }
 

@@ -63,9 +63,9 @@ public class Manager : MonoBehaviourPunCallbacks
                 newplayer = PhotonNetwork.Instantiate("Player_4", SpawnPoint.position, SpawnPoint.rotation);
               
             }
-            //kills clones 
-            photonView.RPC("KillMePlz", RpcTarget.OthersBuffered, newplayer.GetPhotonView().ViewID);
-           
+            //kills clones  /// @dead code only remove for final publish
+            //  photonView.RPC("KillMePlz", RpcTarget.OthersBuffered, newplayer.GetPhotonView().ViewID);
+
         }
 
         else
@@ -82,28 +82,28 @@ public class Manager : MonoBehaviourPunCallbacks
         return newplayer.transform;
     }
 
-    /// <summary>
-    /// bug fix! 
-    /// sometimes when joining, you can join twice thus creating two instances of a player.
-    /// This function removes the clone 
-    /// </summary>
-    /// <param name="playerID">The ID of the original player</param>
-    [PunRPC]
-    public void KillMePlz (int playerID)
-    {
-        //gets the id of the clone, which is always 
-        int cloneID = playerID - 3;
-    
-           try
-           {
-               GameObject clonePlayer = PhotonView.Find(cloneID).gameObject;
-               Destroy(clonePlayer);
-               PlayerLists.Remove(clonePlayer);
-               MySpawners.GetComponent<Spawner>().RemovePlayer(clonePlayer);
-           }
-           catch (Exception) { }
-          
-    }
+  // /// <summary>
+  // /// @dead code only remove for final publish
+  // /// sometimes when joining, you can join twice thus creating two instances of a player.
+  // /// This function removes the clone 
+  // /// </summary>
+  // /// <param name="playerID">The ID of the original player</param>
+  // [PunRPC]
+  // public void KillMePlz (int playerID)
+  // {
+  //     //gets the id of the clone, which is always 
+  //     int cloneID = playerID - 3;
+  // 
+  //        try
+  //        {
+  //            GameObject clonePlayer = PhotonView.Find(cloneID).gameObject;
+  //            Destroy(clonePlayer);
+  //            PlayerLists.Remove(clonePlayer);
+  //            MySpawners.GetComponent<Spawner>().RemovePlayer(clonePlayer);
+  //        }
+  //        catch (Exception) { }
+  //       
+  // }
 
 
     [PunRPC]
