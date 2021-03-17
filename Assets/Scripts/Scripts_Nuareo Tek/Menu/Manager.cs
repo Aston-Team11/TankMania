@@ -56,7 +56,7 @@ public class Manager : MonoBehaviourPunCallbacks
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
-                newplayer = PhotonNetwork.Instantiate("Player_3", SpawnPoint.position, SpawnPoint.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_1", SpawnPoint.position, SpawnPoint.rotation);
             }
             else
             {
@@ -71,7 +71,7 @@ public class Manager : MonoBehaviourPunCallbacks
         else
         {
             //used for spawning host
-            newplayer = PhotonNetwork.Instantiate("Player_1", SpawnPoint.position, SpawnPoint.rotation);
+            newplayer = PhotonNetwork.Instantiate("Player_3", SpawnPoint.position, SpawnPoint.rotation);
         }
 
         newplayer.name = newplayer.GetPhotonView().ViewID.ToString();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class Wait : MonoBehaviour
 {
@@ -10,9 +11,8 @@ public class Wait : MonoBehaviour
 
 
     void Start()
-
     {
-      StartCoroutine(Wait_for_intro());  
+      StartCoroutine(Wait_for_intro());
     }
 
     IEnumerator Wait_for_intro()
@@ -20,6 +20,7 @@ public class Wait : MonoBehaviour
     {
       yield return new WaitForSeconds(12);
 
-      SceneManager.LoadScene(2);
+      //SceneManager.LoadScene(4);
+        PhotonNetwork.LoadLevel(4);
     }
 }

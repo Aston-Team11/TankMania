@@ -135,7 +135,7 @@ public class Lobby : MonoBehaviourPunCallbacks
             //load players in game when all players are ready
             if (readyCount == PhotonNetwork.CurrentRoom.PlayerCount)
             {
-                PhotonNetwork.LoadLevel(4);
+                PhotonNetwork.LoadLevel(5);
             }
         }
     }
