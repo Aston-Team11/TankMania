@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private mouseTargetSwivel mouseClass;     // handles swiveling top of tank
     [SerializeField] private PredictTrajectory trajectoryClass;   // handles aiming
     [SerializeField] private Shooting shootClass;     // handles swiveling top of tank
+    
 
 
     private bool slo;                   //used to enable/disable slo motion
@@ -38,11 +39,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject shieldPic, slowMoPic;
 
 
-    //when player enters smoke, increment posion counter
-    //when player leaves/ 9 seconds are up decrement counter 
-    //if counter less than 0, counter = 0;
-    //whne counter is not 0, posion player.
-
 
     public void Start()
     {
@@ -56,6 +52,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
            
             ActivateHealth();
         }
+
     }
 
     /// <summary>
@@ -240,10 +237,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Vector3 respawnPoint = this.transform.position;
         respawnPoint.y += 50f;
         transform.position = respawnPoint;
-        //gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         gameObject.GetComponent<PlayerMovement>().SetIsInputEnabled(false);
-        //gameObject.GetComponent<Rigidbody>().drag = 1;
-        //gameObject.GetComponent<Rigidbody>().useGravity = true;
         gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
 

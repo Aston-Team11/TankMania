@@ -4,18 +4,23 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 
 public class Lobby : MonoBehaviourPunCallbacks
 {
     private bool ready = false;                   //used locally to track current player's ready status; 
     [SerializeField] private int readyCount = 0; //used to count number of players who are ready
-    [SerializeField] GameObject myReadyBtn;     //used to change the ready button text
+    [SerializeField] GameObject myReadyBtn,myTimer;     //used to change the ready button text
     private GameObject myplayer,otherplayer;    //used to identify the current player and other players respectively 
-  
+
+    private float totalTime = 10;
+     private bool startCount = false;
+    private int seconds;
+
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         if (!(photonView.IsMine))
         {
@@ -24,21 +29,18 @@ public class Lobby : MonoBehaviourPunCallbacks
             {
                 Vector3 pos = new Vector3(-275, -65, 0);
                 myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);   
-                //myplayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Player 2: ";
                 photonView.RPC("SyncNames", RpcTarget.AllBuffered, myplayer.GetPhotonView().ViewID, "Player 2: ");
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
                 Vector3 pos = new Vector3(200, 65, 0);
-                myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);            
-                //myplayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Player 3: ";
+                myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);                         
                 photonView.RPC("SyncNames", RpcTarget.AllBuffered, myplayer.GetPhotonView().ViewID, "Player 3: ");
             }
             else
             {              
                 Vector3 pos = new Vector3(200, -65, 0);          
-                myplayer =  PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);               
-                //myplayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Player 4: ";
+                myplayer =  PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);                               
                 photonView.RPC("SyncNames", RpcTarget.AllBuffered, myplayer.GetPhotonView().ViewID, "Player 4: ");
             }
         }
@@ -47,13 +49,40 @@ public class Lobby : MonoBehaviourPunCallbacks
         {
       
             Vector3 pos = new Vector3(-275, 65, 0);
-            myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);
-           // myplayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Player 1: ";
+            myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);         
             photonView.RPC("SyncNames", RpcTarget.AllBuffered,myplayer.GetPhotonView().ViewID,"Player 1: ");
         }
 
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman
+    /// Handles timer
+    /// </summary>
+    private void Update()
+    {
+        if (totalTime > 0 && startCount == true)
+        {
+            totalTime -= Time.deltaTime;
+            seconds = (int)totalTime; 
+            myTimer.GetComponent<Text>().text = seconds.ToString();
+        }
+        else if (totalTime <= 0 && startCount == true)
+        {
+           startCount = false;
+           PhotonNetwork.LoadLevel(4);
+        }
+
+    }
+
+    public void ResetSetStartCount(bool state)
+    {
+        startCount = state;
+        totalTime = 10f;
+        myTimer.GetComponent<Text>().text = ((int)totalTime).ToString();
+    }
+
+    
     /// <summary>
     /// @author Riyad K Rahman
     /// ready's up player (makes changes in UI)
@@ -119,6 +148,11 @@ public class Lobby : MonoBehaviourPunCallbacks
             {
                 readyCount--;
             }
+
+            //reset timer
+            startCount = false;
+            totalTime = 10f;
+            myTimer.GetComponent<Text>().text = ((int) totalTime).ToString();
         }
         //sets UI elements to ready mode
         else
@@ -135,7 +169,11 @@ public class Lobby : MonoBehaviourPunCallbacks
             //load players in game when all players are ready
             if (readyCount == PhotonNetwork.CurrentRoom.PlayerCount)
             {
-                PhotonNetwork.LoadLevel(5);
+                startCount = true;
+            }
+            else
+            {
+                ResetSetStartCount(false);
             }
         }
     }

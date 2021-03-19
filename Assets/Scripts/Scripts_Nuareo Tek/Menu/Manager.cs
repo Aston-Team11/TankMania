@@ -9,9 +9,9 @@ using UnityEngine.SceneManagement;
 public class Manager : MonoBehaviourPunCallbacks
 {
     
-    public string mouseReticle;
-    public string Enemy;
-    public Transform SpawnPoint, SpawnPointEnemy;
+    private string Enemy = "zombie";
+    public Transform[] SpawnPoint;
+    public Transform SpawnPointEnemy;
     public GameObject time;
     [SerializeField] private int RespawnTime;
     public int count;
@@ -30,9 +30,9 @@ public class Manager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     private void Start()
     {
-        var target = SpawnPlayer();
+        SpawnPlayer();
         bgMusic = GetComponent<AudioSource>();
-        //SpawnZombie(target);
+        SpawnZombie();
     }
 
 
@@ -42,7 +42,7 @@ public class Manager : MonoBehaviourPunCallbacks
     /// spawn player, set ID, assign time object so player can control time when powerup is enabled
     /// </summary>
     /// <returns>player transform so that the enemies can find the player </returns>
-    private Transform SpawnPlayer()
+    private void SpawnPlayer()
     {
 
         GameObject newplayer = new GameObject(); 
@@ -52,15 +52,15 @@ public class Manager : MonoBehaviourPunCallbacks
             //sets different colour presets for each tank
             if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
             {
-                newplayer = PhotonNetwork.Instantiate("Player_2", SpawnPoint.position, SpawnPoint.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_2", SpawnPoint[1].position, SpawnPoint[1].rotation);
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
-                newplayer = PhotonNetwork.Instantiate("Player_1", SpawnPoint.position, SpawnPoint.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_1", SpawnPoint[2].position, SpawnPoint[2].rotation);
             }
             else
             {
-                newplayer = PhotonNetwork.Instantiate("Player_4", SpawnPoint.position, SpawnPoint.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_3", SpawnPoint[3].position, SpawnPoint[3].rotation);
               
             }
             //kills clones  /// @dead code only remove for final publish
@@ -71,7 +71,7 @@ public class Manager : MonoBehaviourPunCallbacks
         else
         {
             //used for spawning host
-            newplayer = PhotonNetwork.Instantiate("Player_3", SpawnPoint.position, SpawnPoint.rotation);
+            newplayer = PhotonNetwork.Instantiate("Player_1", SpawnPoint[0].position, SpawnPoint[0].rotation);
         }
 
         newplayer.name = newplayer.GetPhotonView().ViewID.ToString();
@@ -79,7 +79,7 @@ public class Manager : MonoBehaviourPunCallbacks
 
         photonView.RPC("SyncLists", RpcTarget.AllBuffered, newplayer.GetPhotonView().ViewID);
 
-        return newplayer.transform;
+        
     }
 
   // /// <summary>
@@ -131,33 +131,26 @@ public class Manager : MonoBehaviourPunCallbacks
     /// @author Riyad K Rahman
     /// spawns a zombie and sends the players position
     /// </summary>
-    /// <param name="targetPosition"> the player 1 posistion in the world</param>
-    private void SpawnZombie(Transform targetPosition)
+    private void SpawnZombie()
     {
         if (!(photonView.IsMine)) return;
 
-        StartCoroutine(DelaySpawn(targetPosition));
+        StartCoroutine(DelaySpawn());
 
     }
 
-    IEnumerator DelaySpawn(Transform targetPosition)
+    IEnumerator DelaySpawn()
     {
         yield return new WaitForSeconds(SpawnTimer);
 
         for (int i = 0; i < 5; i++)
         {
             var zombie = PhotonNetwork.Instantiate(Enemy, SpawnPointEnemy.position, SpawnPointEnemy.rotation);
-            zombie.SetActive(true);
-            zombie.name = "zombie" + i;
-            zombie.SendMessage("TargetPlayer1");
-
+           // zombie.name = "zombie" + i;
+           // zombie.SendMessage("TargetPlayer1");
+            zombie.GetComponent<UnityStandardAssets.Characters.ThirdPerson.AICharacterControl>().TargetPlayer1();
+           
         }
-    }
-
-
-    public void Update()
-    {
-
     }
 
     public void CheckForEndGame()

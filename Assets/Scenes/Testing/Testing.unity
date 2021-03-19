@@ -162,7 +162,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -521,6 +521,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Mortimer Zombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310192733616462452, guid: c2c4fbf0cc9d14e4282108eec79a4f81,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6310192733616462454, guid: c2c4fbf0cc9d14e4282108eec79a4f81,
         type: 3}

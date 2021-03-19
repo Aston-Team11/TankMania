@@ -15,8 +15,7 @@ public class Spawner : MonoBehaviourPunCallbacks
     public GameObject target;
     public int Spawncount = 4;
 
-    //Riyad
-    private GameObject player;
+    [SerializeField] private GameObject powerupBox;
 
     [SerializeField] private List<GameObject> PlayerLists = new List<GameObject>();
 

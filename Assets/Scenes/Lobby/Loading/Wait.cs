@@ -6,9 +6,8 @@ using Photon.Pun;
 
 public class Wait : MonoBehaviour
 {
-
-   // public float wait_time - 9f;
-
+    [SerializeField] private float wait_time = 12f;
+    [SerializeField] private GameObject bg, lobby;
 
     void Start()
     {
@@ -18,9 +17,12 @@ public class Wait : MonoBehaviour
     IEnumerator Wait_for_intro()
 
     {
-      yield return new WaitForSeconds(12);
-
-      //SceneManager.LoadScene(4);
-        PhotonNetwork.LoadLevel(4);
+      yield return new WaitForSeconds(wait_time);
+       //enable lobby screen
+        bg.SetActive(true);
+        lobby.SetActive(true);
     }
+
+
+
 }

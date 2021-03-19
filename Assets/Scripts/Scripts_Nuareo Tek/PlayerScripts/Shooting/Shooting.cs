@@ -38,6 +38,7 @@ public class Shooting : MonoBehaviourPunCallbacks
 
         if (Input.GetButtonDown("Fire1"))
         {
+
             if (shootAble)
             {
                 shootAble = false;
@@ -72,7 +73,6 @@ public class Shooting : MonoBehaviourPunCallbacks
             rot.Set(rot.x, rot.y, angle, 1);
             var bullet = Instantiate(theBullet, transform.position, rot);
             Rigidbody rb = bullet.GetComponent<Rigidbody>();
-
 
             if (Shield.activeSelf)
             {

@@ -35,7 +35,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         /// </summary>
         public void TargetPlayer1()
         {
-            photonView.RPC("Retarget", RpcTarget.AllViaServer, "1001");
+            photonView.RPC("Retarget", RpcTarget.AllViaServer, "1002");
         }
 
 
