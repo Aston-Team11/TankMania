@@ -29,7 +29,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject MySystem; //handles ending the game
 
     [SerializeField] private bool poision;  //used to enable/disable poison damage
-    [SerializeField] private int isPoision; //used to check if poison damage should be appl
+    [SerializeField] private int isPoision; //used to check if poison damage should be applied
 
     [SerializeField] private int lives;         // number of player lives 
     [SerializeField] private GameObject Balloon; // used for animating respawn
@@ -155,7 +155,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
 
 
-        [PunRPC]
+    [PunRPC]
     public void spawnShield()
     {
         shield.SetActive(true);
@@ -208,7 +208,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
  
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         //enable balloon
         Balloon.SetActive(true);
@@ -244,9 +244,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         this.gameObject.SetActive(true);
     }
 
-    private void OnEnable()
+    public override void OnEnable()
     {
         CancelInvoke();
+        poision = false;
+        isPoision = 0;
     }
 
 

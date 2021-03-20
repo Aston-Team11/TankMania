@@ -14,9 +14,8 @@ public class RoundNumber : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameObject = GameObject.Find("Spawners");
-        //Spawner round = gameObject.GetComponent<Spawner>();
-        roundNumber = GetComponent<Text>() as Text;
+        gameObject = GameObject.Find("Zombie Spawners");
+        roundNumber = GetComponent<Text>();
     }
 
     // Update is called once per frame

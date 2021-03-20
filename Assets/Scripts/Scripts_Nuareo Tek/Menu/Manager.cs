@@ -22,17 +22,29 @@ public class Manager : MonoBehaviourPunCallbacks
     [SerializeField] private float SpawnTimer;
     [SerializeField] private GameObject[] players;
     private AudioSource bgMusic;
+    [SerializeField] private bool PVE;
+
 
     /// <summary>
     /// @author Riyad K Rahman
     /// when the game starts spawn players and zombies
     /// </summary>
-    // Start is called before the first frame update
     private void Start()
     {
         SpawnPlayer();
         bgMusic = GetComponent<AudioSource>();
-        SpawnZombie();
+        
+        //if pve mode is on spawn the zombies
+        if (PVE) 
+        { 
+            SpawnZombie();
+        }
+        //otherwise deactivate spawners to make game run faster
+        else
+        {
+            GameObject.Find("Zombie Spawners").SetActive(false);
+        }
+       
     }
 
 

@@ -5,14 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class playerbtn : MonoBehaviour
 {
-    private GameObject canvas,loading;
-   // private bool trigger = false;
+    [SerializeField] private GameObject canvas,loading,errorscreen;
+
 
     // Start is called before the first frame update
     void Start()
     {
         canvas = GameObject.Find("Canvas");
         loading = GameObject.Find("LoadingComponent");
+        errorscreen = GameObject.Find("ErrorScreen");
         this.gameObject.transform.SetParent(canvas.transform, false);
         canvas.GetComponent<Lobby>().ResetSetStartCount(false); //reset lobby countdown
         this.gameObject.SetActive(false);
@@ -21,11 +22,16 @@ public class playerbtn : MonoBehaviour
 
     private void OnDisable()
     {
-        InvokeRepeating("lobbyloaded", 12f, 100f);
+        InvokeRepeating("lobbyloaded", 12.2f, 100f);
     }
 
     private void lobbyloaded()
     {
-        this.gameObject.SetActive(true);
+        if (errorscreen == null)
+        {
+            this.gameObject.SetActive(true);
+        }
+             
+       CancelInvoke();
     }
 }

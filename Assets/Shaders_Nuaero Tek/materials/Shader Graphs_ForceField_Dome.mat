@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Dissovle_3
-  m_Shader: {fileID: -6465566751694194690, guid: b33eb73bfc3211244868651873f23d4a,
+  m_Name: Shader Graphs_ForceField_Dome
+  m_Shader: {fileID: -6465566751694194690, guid: 79ee376849224164d93a127479dd75aa,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -20,18 +20,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_B3F8F5BD:
+    - Texture2D_5656CB0F:
         m_Texture: {fileID: 2800000, guid: 62c7da6ac4c700140a417deba581da46, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_2E8A09FF: -0.9019982
-    - Vector1_466C2DEE: 0.01
-    - Vector1_7AFF87E4: 1.0720003
-    - Vector1_9462CAB5: 0.05
-    - Vector1_9FD2DF5E: 0.05
-    - Vector1_B42CF1DC: 35
-    - Vector1_EAA9C92B: 0.6
+    - Vector1_80B14FFF: 0.05
+    - Vector1_9F6E0BD2: 0.05
+    - Vector1_CD965979: 2.37
+    - Vector1_EBFAC9DB: 0.6
     m_Colors:
-    - Color_8FEED856: {r: 5.026515, g: 0.3137254, b: 11.98431, a: 0}
-    - Color_F3C90867: {r: 1.825546, g: 3.7326024, b: 4.9811325, a: 1}
+    - Color_295AA6FA: {r: 0.6886792, g: 0.14893076, b: 0, a: 0}

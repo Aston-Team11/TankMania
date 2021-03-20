@@ -14,6 +14,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField]private string roomName;
     static private string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
     public void Awake()
     {
         StartCoroutine(AwakeDelay());
@@ -89,8 +90,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
 
     public string getRoomName() { return roomName; }
-   // public void setRoomName(string name) { roomName = name; }
-
+    // public void setRoomName(string name) { roomName = name; }
 
 }
 

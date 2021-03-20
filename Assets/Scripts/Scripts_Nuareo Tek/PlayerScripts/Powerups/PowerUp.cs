@@ -10,18 +10,30 @@ using Photon.Pun;
 /// </summary>
 public class PowerUp : MonoBehaviourPunCallbacks
 {
-    public GameObject explosion;            // the paricle effect for explosion
+    [SerializeField] private GameObject explosion;            // the paricle effect for explosion
+    private AudioSource explosion_soundEffect;  // the explosion sound effect for the power up boxes
+    private GameObject mySpawner;
+    private Vector3 descend = new Vector3(0f, -5f, 0f);
 
-    public GameObject explosion_soundEffect;  // the explosion sound effect for the power up boxes
 
-
+    /// <summary>
+    /// Finds the audio component to play the explosion sound
+    /// </summary>
     public void Start()
     {
-        // explosionSound = GetComponent<AudioSource>();
-        explosion_soundEffect = GameObject.FindGameObjectWithTag("PowerUpExplosion"); //the tag is connected to the Explosives object sound in the map object.
+        explosion_soundEffect = GameObject.FindGameObjectWithTag("PowerUpExplosion").GetComponent<AudioSource>();
     }
 
-
+    private void FixedUpdate()
+    {
+        //drop in the box 
+        if (transform.position.y > 0.5)
+        {
+            transform.Translate(descend * Time.deltaTime, Space.World);
+        }
+        else
+        { return; }
+    }
 
     /// <summary>
     /// @author Riyad K Rahman
@@ -49,7 +61,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
         var Exploded = Instantiate(explosion, transform.position, transform.rotation);
         Destroy(Exploded, 2f);
         photonView.RPC("sendDestroy", RpcTarget.AllBufferedViaServer);
-        explosion_soundEffect.GetComponent<AudioSource>().Play();        //play the explosion sound effect.
+        explosion_soundEffect.Play();        //play the explosion sound effect.
     }
 
     /// <summary>
@@ -59,7 +71,22 @@ public class PowerUp : MonoBehaviourPunCallbacks
     [PunRPC]
     public void sendDestroy()
     {
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
+    }
+
+
+    /// <summary>
+    /// @author Riyad K Rahman
+    /// when the game object is disabled it will destroy itself only on the master client
+    /// </summary>
+    public override void OnDisable()
+    {
+        if (photonView.IsMine)
+        {
+            mySpawner.GetComponent<PowerupSpawner>().decrementBoxCount();
+            PhotonNetwork.Destroy(this.photonView);
+        }
+
     }
 
     /// <summary>
@@ -95,6 +122,11 @@ public class PowerUp : MonoBehaviourPunCallbacks
         }
 
 
+    }
+
+    public void SetMySpawner(GameObject spawner)
+    {
+        mySpawner = spawner;
     }
 
 }

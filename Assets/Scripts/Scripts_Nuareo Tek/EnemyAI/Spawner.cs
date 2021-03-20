@@ -14,8 +14,7 @@ public class Spawner : MonoBehaviourPunCallbacks
     public GameObject enemy;
     public GameObject target;
     public int Spawncount = 4;
-
-    [SerializeField] private GameObject powerupBox;
+    private int maxwaveNumber = 10;
 
     [SerializeField] private List<GameObject> PlayerLists = new List<GameObject>();
 
@@ -92,8 +91,7 @@ public class Spawner : MonoBehaviourPunCallbacks
     private void NextWave()
     {
         waveNumber++;
-        //!!!! get rid of if statment ( if it causes issues
-        if(waveNumber < 9)
+        if(waveNumber < maxwaveNumber)
         {
             enemySpawnAmount += 5;
             enemiesKilled = 0;
@@ -106,9 +104,16 @@ public class Spawner : MonoBehaviourPunCallbacks
         }
         else
         {
-
+            //ends the game for all players
+            photonView.RPC("Endgame", RpcTarget.All);
         }
        
+    }
+
+    [PunRPC]
+    private void Endgame()
+    {
+        PhotonNetwork.LoadLevel("EndGame");
     }
 
    

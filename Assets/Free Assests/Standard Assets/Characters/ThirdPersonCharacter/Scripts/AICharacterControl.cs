@@ -11,12 +11,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     public class AICharacterControl : MonoBehaviourPunCallbacks
     {
 
-        [SerializeField] private Transform target;                                                   // target to aim for
-        public GameObject[] playerList;
+        [SerializeField] private Transform target;      // the transform of the target to aim for
+        public GameObject[] playerList;                 // a list of players
 
 
         [SerializeField] private float minimumDist; //edit this field to mkae the zombie change target
         [SerializeField] private float dist;
+        [SerializeField] private int poisonCloudSpawnRate;
 
         private GameObject spawner; //used to access the spawner script 
         public GameObject Blood_Sound_Effect;   // bloodspray sound effect
@@ -27,11 +28,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         public GameObject bombSpray;  //this is the effect of the zombie exploding
         public GameObject radiation;  //this is the effect of the explosion remnants
-        public GameObject bloodSpray;                                               // bloodspray particle effect
+        public GameObject bloodSpray; // bloodspray particle effect
 
 
         /// <summary>
-        /// Only to be used once
+        /// @author Riyad K Rahman
+        /// Only to be used once when system gameobject spawns the first zombies
         /// </summary>
         public void TargetPlayer1()
         {
@@ -81,6 +83,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
         }
 
+        /// <summary>
+        /// sets the target of a zombie
+        /// </summary>
+        /// <param name="name">name of the player</param>
         [PunRPC]
         public void Retarget(string name)
         {
@@ -108,9 +114,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             agent.updatePosition = true;
 
             spawner = GameObject.FindGameObjectWithTag("EnemySpawn");
-            //spawn = GetComponent<Spawner>();
             Blood_Sound_Effect = GameObject.Find("ZombieSpawn");
-
 
         }
 
@@ -118,8 +122,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+            //if target is empty just stay put
+            if (target == null)
+            {
+                target = this.transform;
+
+            }
+
+            //go to the nearest player
             DistanceCalculator();
         
+          
             //sets the target
             agent.SetDestination(target.position);
 
@@ -127,10 +140,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 character.Move(agent.desiredVelocity, false, false);
 
             else
-                //stop moving (vertor3.zero) 
+                //stop moving (vector.zero) 
                 character.Move(Vector3.zero, false, false);
-            //!!!! add attacking animation here
-
+            //!!!! add attacking animation here   
         }
 
 
@@ -203,8 +215,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             //call explosion effect
             var zExplosion = Instantiate(bombSpray, transform.position, bombSpray.transform.rotation);
             Destroy(zExplosion, 2f);
-            //call toxic effect 
-            //var zRadiation = Instantiate(radiation, transform.position, radiation.transform.rotation);
+
+            //only master client hnadles whether radiation cloud should spawn or not 
+            if (photonView.IsMine)
+            {
+               if (UnityEngine.Random.Range(0, poisonCloudSpawnRate) == 1)
+                {
+                    photonView.RPC("SpawnCloud", RpcTarget.All);
+                }
+ 
+            }
             
             
   
@@ -218,20 +238,28 @@ namespace UnityStandardAssets.Characters.ThirdPerson
      
         }
 
+
+        /// <summary>
+        /// @auhtor Riyad K Rahman
+        /// spawns radiation cloud on all clients
+        /// </summary>
+        [PunRPC]
+        private void SpawnCloud()
+        {
+            //call toxic effect 
+             Instantiate(radiation, transform.position, radiation.transform.rotation);
+        }
+
         /// <summary>
         /// @author Riyad K Rahman
-        /// when the game object is disabled it will destroy itself only on the master client
+        /// when the game object is disabled it will destroy itself only triggered by the master client
         /// </summary>
-
-        void OnDisable()
+        public override void OnDisable()
         {
             if (photonView.IsMine)
             {
                 PhotonNetwork.Destroy(this.photonView);
             }
-            
         }
-
-
     }
 }

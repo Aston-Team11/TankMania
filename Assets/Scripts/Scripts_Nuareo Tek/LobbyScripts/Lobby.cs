@@ -11,7 +11,7 @@ public class Lobby : MonoBehaviourPunCallbacks
 {
     private bool ready = false;                   //used locally to track current player's ready status; 
     [SerializeField] private int readyCount = 0; //used to count number of players who are ready
-    [SerializeField] GameObject myReadyBtn,myTimer;     //used to change the ready button text
+    [SerializeField] GameObject myReadyBtn,myTimer,mySession;     //used to change the ready button text
     private GameObject myplayer,otherplayer;    //used to identify the current player and other players respectively 
 
     private float totalTime = 10;
@@ -47,7 +47,6 @@ public class Lobby : MonoBehaviourPunCallbacks
 
         else
         {
-      
             Vector3 pos = new Vector3(-275, 65, 0);
             myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);         
             photonView.RPC("SyncNames", RpcTarget.AllBuffered,myplayer.GetPhotonView().ViewID,"Player 1: ");
@@ -57,7 +56,8 @@ public class Lobby : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman
-    /// Handles timer
+    /// Handles counting of the timer, loads level when counter is 0
+    /// informs all players game session has begun
     /// </summary>
     private void Update()
     {
@@ -70,11 +70,21 @@ public class Lobby : MonoBehaviourPunCallbacks
         else if (totalTime <= 0 && startCount == true)
         {
            startCount = false;
+            if (photonView.IsMine)
+            {
+                mySession.GetComponent<GameSession>().setGameSession();
+            }
            PhotonNetwork.LoadLevel(4);
         }
 
     }
 
+
+    /// <summary>
+    /// @author Riyad K Rahman
+    /// handles resetting the countdown timer to join the game scene
+    /// </summary>
+    /// <param name="state"></param>
     public void ResetSetStartCount(bool state)
     {
         startCount = state;
