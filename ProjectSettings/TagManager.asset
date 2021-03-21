@@ -13,6 +13,10 @@ TagManager:
   - EnemySpawn
   - PowerUpExplosion
   - EnemySystem
+  - Aoe
+  - FxTemporaire
+  - GameSession
+  - PlayerAddOns
   layers:
   - Default
   - TransparentFX

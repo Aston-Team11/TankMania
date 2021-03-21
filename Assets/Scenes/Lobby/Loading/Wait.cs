@@ -21,6 +21,14 @@ public class Wait : MonoBehaviour
     IEnumerator checkJoin()
     {
         yield return new WaitForSeconds(0.1f);
+
+        //check if a game session has already begun
+        if (GameObject.FindGameObjectWithTag("GameSession") != null)
+        {
+            PhotonNetwork.Disconnect();
+            showerror = true;
+        }
+
         StartCoroutine(Wait_for_intro());
     }
 
