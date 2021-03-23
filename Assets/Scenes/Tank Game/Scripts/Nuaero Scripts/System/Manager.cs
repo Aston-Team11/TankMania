@@ -63,11 +63,11 @@ public class Manager : MonoBehaviourPunCallbacks
             }
             else if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
-                newplayer = PhotonNetwork.Instantiate("Player_1", playerSpawns[gameMode].transform.GetChild(2).transform.position, playerSpawns[gameMode].transform.GetChild(2).transform.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_3", playerSpawns[gameMode].transform.GetChild(2).transform.position, playerSpawns[gameMode].transform.GetChild(2).transform.rotation);
             }
             else
             {
-                newplayer = PhotonNetwork.Instantiate("Player_3", playerSpawns[gameMode].transform.GetChild(3).transform.position, playerSpawns[gameMode].transform.GetChild(3).transform.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_4", playerSpawns[gameMode].transform.GetChild(3).transform.position, playerSpawns[gameMode].transform.GetChild(3).transform.rotation);
               
             }
         }

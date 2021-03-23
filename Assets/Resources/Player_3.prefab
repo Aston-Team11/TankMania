@@ -1471,7 +1471,7 @@ MonoBehaviour:
   MySystem: {fileID: 0}
   pve: {fileID: 8008453263285291518}
   ffa: {fileID: 1168250623453533449}
-  ffaKills: {fileID: 7666903387223838171}
+  ffaKills: {fileID: 3009581602014732952}
   health: 100
   healthB: {fileID: 7978268764876586900}
   poision: 0
@@ -7422,9 +7422,9 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5799060572150117536}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7666903387223838171 stripped
+--- !u!114 &3009581602014732952 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4187282088766765435, guid: 2fcb98a0a004e344b9b29e76e739f09a,
+  m_CorrespondingSourceObject: {fileID: 8772528667484526136, guid: 2fcb98a0a004e344b9b29e76e739f09a,
     type: 3}
   m_PrefabInstance: {fileID: 5799060572150117536}
   m_PrefabAsset: {fileID: 0}
