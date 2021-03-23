@@ -263,6 +263,7 @@ MonoBehaviour:
   playerList: []
   minimumDist: 7
   dist: 0
+  poisonCloudSpawnRate: 15
   Blood_Sound_Effect: {fileID: 0}
   bombSpray: {fileID: 816811174849011688, guid: b27e07517c293e245975d8e89543411a,
     type: 3}
