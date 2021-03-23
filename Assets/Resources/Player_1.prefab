@@ -5766,7 +5766,7 @@ MonoBehaviour:
   MySystem: {fileID: 0}
   pve: {fileID: 5748812195927926946}
   ffa: {fileID: 6139225016855194105}
-  ffaKills: {fileID: 3414517291864076587}
+  ffaKills: {fileID: 7836461148439862888}
   health: 100
   healthB: {fileID: 3350756239286400328}
   poision: 0
@@ -7298,6 +7298,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 405749819840964562}
     m_Modifications:
+    - target: {fileID: 3398629475817261409, guid: 2fcb98a0a004e344b9b29e76e739f09a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4633099131972788649, guid: 2fcb98a0a004e344b9b29e76e739f09a,
         type: 3}
       propertyPath: m_Name
@@ -7427,9 +7432,9 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1548952111963752528}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3414517291864076587 stripped
+--- !u!114 &7836461148439862888 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4187282088766765435, guid: 2fcb98a0a004e344b9b29e76e739f09a,
+  m_CorrespondingSourceObject: {fileID: 8772528667484526136, guid: 2fcb98a0a004e344b9b29e76e739f09a,
     type: 3}
   m_PrefabInstance: {fileID: 1548952111963752528}
   m_PrefabAsset: {fileID: 0}

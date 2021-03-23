@@ -67,22 +67,25 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     /// <param name="gamemode">the current gamemode</param>
     public void GameModeSetup(int gamemode)
     {
-        gameMode = gamemode;
-
-        switch (gameMode)
+        if (photonView.IsMine)
         {
-            case 0:
-                pve.SetActive(true);
-                break;
+            gameMode = gamemode;
 
-            case 1:
-                ffa.SetActive(true);
-                lives = 1000;
-                break;
+            switch (gameMode)
+            {
+                case 0:
+                    pve.SetActive(true);
+                    break;
 
-            default:
-                print("No Gamemode Selected");
-                break;
+                case 1:
+                    ffa.SetActive(true);
+                    lives = 1000;
+                    break;
+
+                default:
+                    print("No Gamemode Selected");
+                    break;
+            }
         }
     }
 
