@@ -15,12 +15,9 @@ public class Shooting : MonoBehaviourPunCallbacks
 
     public int bulletSpeed;                            // the speed of the bullet 
     public GameObject parent;                          // the player who shot the bullet 
-    public bool shootAble = true;
     public bool ShotgunEnable = false;
     public bool MinigunEnable = false; 
-    public float waitBeforeNextShot = 0.25f;
     public float PowerupTime = 4.5f;
-    public GameObject Shield;
 
     public bool shootAble = true;                      //used to handle reloading 
     public float waitBeforeNextShot = 0.25f;           //the time for reload

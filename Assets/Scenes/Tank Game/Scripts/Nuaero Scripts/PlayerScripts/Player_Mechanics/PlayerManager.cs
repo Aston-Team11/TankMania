@@ -7,75 +7,103 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private int order;
+    [SerializeField] private int order;                             //used to sort players in lists (for zombie spawner targeting)
+    private int gameMode;                                          //the current gamemode selceted affects which UI elements are displayed 
+    [SerializeField] private int killCount;                        //number of kills of other players 
+    private int maxkills = 10;                                     //number of kills needed to end the game 
+    [SerializeField] private GameObject MySystem;                   //handles ending the game
+    [SerializeField] private GameObject pve, ffa;                   //two different UI setups
+    [SerializeField] private Text ffaKills;                         //killCount in UI
+    private GameObject SpawnPoints;                                 //holds different spawn points a player can spawn from 
 
-    [SerializeField] private float health;            //health of player
-    [SerializeField] private GameObject healthB;      //health bar
-    [SerializeField] private GameObject explosion;    //explosion particle effect
-    private Slo_Motion slow;                            //slomotion powerup
-    [SerializeField] private GameObject shield;       //shield powerup
+    #region Health
+    [Header("Health Management")]
+    [SerializeField] private float health;                          //health of player
+    [SerializeField] private GameObject healthB;                    //health bar
+    [SerializeField] private bool poision;                      //used to enable/disable poison damage
+    [SerializeField] private int isPoisionCount;                     //used to check if poison damage should be applied
+    [SerializeField] private GameObject explosion;                   //explosion particle effect
+    #endregion
 
-    [SerializeField] private GameObject mouseTarget;  // mouse reticle object
-    [SerializeField] private mouseTargetSwivel mouseClass;     // handles swiveling top of tank
+    #region Aiming
+    [Header("Setting Aim")]
+    [SerializeField] private GameObject mouseTarget;                // mouse reticle object
+    [SerializeField] private mouseTargetSwivel mouseClass;          // handles swiveling top of tank
     [SerializeField] private PredictTrajectory trajectoryClass;   // handles aiming
-    [SerializeField] private Shooting shootClass;     // handles swiveling top of tank
+    [SerializeField] private Shooting shootClass;                // handles swiveling top of tank
+    #endregion 
 
-
-    private bool slo;                   //used to enable/disable slo motion
-    private string powerUpType = "";    //stores the current powerup as a string
-
-
-    [SerializeField] private GameObject MySystem; //handles ending the game
-
-    [SerializeField] private bool poision;  //used to enable/disable poison damage
-    [SerializeField] private int isPoision; //used to check if poison damage should be appl
-
-    [SerializeField] private int lives;         // number of player lives 
-    [SerializeField] private GameObject Balloon; // used for animating respawn
-    private bool respawning = false;            //used for controlling respawn
+    #region Respawn
+    [Header("Respawning")]
+    [SerializeField] private int lives;                         // number of player lives 
+    [SerializeField] private GameObject Balloon;                // used for animating respawn
+    private bool respawning = false;                            //used for controlling respawn
     private Vector3 descend = new Vector3(0f, -5f, 0f);
     [SerializeField] private GameObject livesText;
-    [SerializeField] private GameObject shieldPic, slowMoPic;
+    #endregion
 
-
-    //when player enters smoke, increment posion counter
-    //when player leaves/ 9 seconds are up decrement counter 
-    //if counter less than 0, counter = 0;
-    //whne counter is not 0, posion player.
 
 
     public void Start()
     {
         SetName();
-        SetOrder(Convert.ToInt32(this.gameObject.name));
+        SetOrder(photonView.ViewID);
 
         if (photonView.IsMine)
         {
             setMouse();
-           MySystem = GameObject.Find("----SYSTEMS----");
-           
+            MySystem = GameObject.Find("----SYSTEMS----");
+
             ActivateHealth();
+        }
+
+    }
+
+
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// setup apropriate UI for the gamemode 
+    /// </summary>
+    /// <param name="gamemode">the current gamemode</param>
+    public void GameModeSetup(int gamemode)
+    {
+        if (photonView.IsMine)
+        {
+            gameMode = gamemode;
+
+            switch (gameMode)
+            {
+                case 0:
+                    pve.SetActive(true);
+                    break;
+
+                case 1:
+                    ffa.SetActive(true);
+                    lives = 1000;
+                    break;
+
+                default:
+                    print("No Gamemode Selected");
+                    break;
+            }
         }
     }
 
+
     /// <summary>
-    /// @author Riyad K Rahman
+    /// @author Riyad K Rahman <br></br>
     /// Sets the players name
     /// </summary>
     public void SetName()
     {
-        photonView.RPC("UpdateName", RpcTarget.AllBuffered, this.gameObject.name);
+        this.gameObject.name = photonView.ViewID.ToString();
+
     }
 
-
-    [PunRPC]
-    public void UpdateName(string name)
-    {
-        this.gameObject.name = name;
-    }
-
-  
-
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  instantiates (spawn in) the mouse reticle, and assign it to the player's targetting systems 
+    /// </summary>
     public void setMouse()
     {
         if (!photonView.IsMine) return;
@@ -85,41 +113,25 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         mouseTarget.SetActive(true);
         mouseClass.SetMouseAim(mouseTarget);
         trajectoryClass.SetMouseAim(mouseTarget);
-        
+
     }
 
-
-    public void setTimeObject(GameObject time)
-    {
-        slow = time.GetComponent<Slo_Motion>();
-    }
-
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  Activates the health bar on the player's UI
+    /// </summary>
     public void ActivateHealth()
     {
         if (!photonView.IsMine) return;
         healthB.SetActive(true);
     }
 
-
+    /// <summary>
+    /// checks player's health every frame 
+    /// </summary>
     private void Update()
     {
         if (!photonView.IsMine) return;
-
-        if (powerUpType.Contains("SLOMO") && (Input.GetKeyDown(KeyCode.Space)))
-        {
-            slo = !slo;
-            slow.Activate(slo);
-        }
-
-        else if (powerUpType.Contains("SHIELD") && (Input.GetKeyDown(KeyCode.Space)))
-        {
-            // only allow it to be active if it is turned off
-            if (!(shield.activeSelf))
-            {
-                photonView.RPC("spawnShield", RpcTarget.AllBufferedViaServer);
-                displayShield(false);
-            }
-        }
 
         updateHealth();
         setLivesText();
@@ -151,6 +163,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  deactivate the balloon gameobject across all clients
+    /// </summary>
     [PunRPC]
     public void deactivateBalloon()
     {
@@ -158,34 +174,30 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
 
 
-        [PunRPC]
-    public void spawnShield()
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  applies posion damage if applicable, else if player's health is 0 then starts a respawn
+    /// </summary>
+    private void updateHealth()
     {
-        shield.SetActive(true);
-        shield.SendMessage("resetFernal", -0.2f);
-        powerUpType = "";
+        PosionDamage();
+
+        if (health <= 0)
+        {
+            photonView.RPC("RespawnMe", RpcTarget.AllBuffered);
+        }
     }
 
-        // kill player on 0 health
-        private void updateHealth()
-         {
-            PosionDamage();
-
-            if (health <= 0)
-            {
-                photonView.RPC("RespawnMe", RpcTarget.AllBuffered);
-            }
-        }
-
     /// <summary>
+    ///  @author Riyad K Rahman <br></br>
     /// disable this player for all players in the room
     /// </summary>
     [PunRPC]
     public void RespawnMe()
     {
         lives--;
- 
-        if(lives > 0)
+
+        if (lives > 0)
         {
             //instantiate explosion effect 
             var Exploded = Instantiate(explosion, transform.position, transform.rotation);
@@ -198,20 +210,22 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             mouseTarget.SetActive(false);
 
             //respawn player
-            this.gameObject.SetActive(false); 
+            this.gameObject.SetActive(false);
         }
         else
         {
             //endgame
-            MySystem.GetComponent<Manager>().CheckForEndGame();
+            MySystem.GetComponent<Manager>().BeginEndGame();
         }
 
-        
+
     }
 
- 
-
-    private void OnDisable()
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  resets health stats and starts a respawn
+    /// </summary>
+    public override void OnDisable()
     {
         //enable balloon
         Balloon.SetActive(true);
@@ -228,85 +242,54 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// @author Riyad K Rahman
-    /// re-enable reticle, this player and thier health
+    /// @author Riyad K Rahman <br></br>
+    /// re-enable mouse reticle, this player gameobject and thier health
     /// </summary>
     private void startRespawn()
     {
         health = 100;
         mouseTarget.SetActive(true);
-        
-        //fall from above
+
         Vector3 respawnPoint = this.transform.position;
+
+        // if the game mode is not FFA then spawn player on thier current position
+        if (SpawnPoints != null && photonView.IsMine)
+        {
+            int result = UnityEngine.Random.Range(0, 4);
+            respawnPoint = SpawnPoints.transform.GetChild(result).transform.position;
+        }
+
+        //fall from above
         respawnPoint.y += 50f;
         transform.position = respawnPoint;
-        //gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         gameObject.GetComponent<PlayerMovement>().SetIsInputEnabled(false);
-        //gameObject.GetComponent<Rigidbody>().drag = 1;
-        //gameObject.GetComponent<Rigidbody>().useGravity = true;
         gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
 
         this.gameObject.SetActive(true);
     }
 
-    private void OnEnable()
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  stops calling respawn function, removes poison stats
+    /// </summary>
+    public override void OnEnable()
     {
         CancelInvoke();
+        poision = false;
+        isPoisionCount = 0;
     }
-
 
     /// <summary>
-    /// 
+    ///  @author Riyad K Rahman <br></br>
+    ///  applies damage to the player's health and sync's this across all clients.
+    ///  this is so only the local player does the damage calculations for itself. 
+    ///  Since lag can cause unexpected syncing issues it's best you only recieve damage if you see the event on your machine 
     /// </summary>
-    public void StatReset()
-    {
-        health = 1000;
-    }
-
-
-
-    public void PowerupAttained(string powerType)
-    {
-        displayShield(false);
-        displaySlowMo(false);
-
-        powerUpType = powerType;
-        if (powerUpType == "SHIELD")
-        {
-            displayShield(true);
-        }
-        else if (powerUpType == "SLOMO")
-        {
-            displaySlowMo(true);
-        }
-        else if (powerUpType == "HealthUp")
-        {
-            //add 10 to the health 
-            SetHealth(10.0f);
-
-            //issue with not syncing with the health bar 
-        }
-        else if (powerUpType == "AdditionalLife")
-        {
-            //working fine 
-            AddLife();
-        }
-        else if (powerType == "Shotgun")
-        {
-            shootClass.SetShotgun();
-             
-        }
-        else if (powerType == "Minigun") 
-        {
-            shootClass.SetMinigun(); 
-        }
-    }
-
-   
+    /// <param name="dmg">the amount of damage the player should recieve</param>
     public void DamagePlayer(float dmg)
     {
-        //!!!! apply any damage multipliers here?
+        //!!!! apply any damage multipliers here
         if (photonView.IsMine)
         {
             health -= dmg;
@@ -315,6 +298,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
+    /// @author Riyad K Rahman <br></br>
     /// informs all players in the room of this player's health
     /// </summary>
     /// <param name="dmg"></param>
@@ -325,14 +309,88 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         healthB.GetComponent<HealthBar>().SetHealth(health);
     }
 
-
-    public void PosionDamage()
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// if there is at least 1 poisonCount then damage will be applied 
+    /// </summary>
+    private void PosionDamage()
     {
-        if(isPoision > 0)
+        if (isPoisionCount > 0)
         {
             DamagePlayer(0.05f);
         }
     }
+
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  handles poison AOE damage. the counter <see cref="isPoisionCount"/> is used to identify whether the player is in multiple radiation clouds or not 
+    ///  the <see cref="isPoisionCount"/>  is decremented after 9 seconds via the coroutine <see cref="endPoison"/>.
+    ///  this is because when the radition cloud is destroyed there is no way to notify the player that he should no longer be poisoned
+    ///  the player must track thier poison state locally.
+    /// </summary>
+    /// <param name="state">bool to determine if the player is being poisioned </param>
+    public void Setpoisoned(bool state)
+    {
+        poision = state;
+
+        if (poision == true)
+        {
+            isPoisionCount++;
+            StartCoroutine(endPoison());
+        }
+        else if (isPoisionCount > 0)
+        {
+            isPoisionCount--;
+            //StopCoroutine(endPoison());
+        }
+
+    }
+
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    /// the <see cref="isPoisionCount"/>  is decremented after 9 seconds
+    /// </summary>
+    /// <returns>watis for 9 seconds before executing the rest of the function</returns>
+    IEnumerator endPoison()
+    {
+        yield return new WaitForSeconds(9f);
+        if (isPoisionCount > 0)
+        {
+            poision = false;
+            isPoisionCount--;
+        }
+    }
+
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// increments kill counter and updates UI
+    /// when <see cref="maxkills"/> has been reached then the game will end 
+    /// </summary>
+    public void AddKill()
+    {
+        killCount++;
+
+        if (!photonView.IsMine) { return; }
+
+        ffaKills.text = killCount.ToString();
+
+        if (killCount > maxkills)
+        {
+            //endgame
+            MySystem.GetComponent<Manager>().BeginEndGame();
+        }
+    }
+    public void SetHealth(float inc)
+    {
+        float x = inc;
+        health = health + x;
+    }
+
+    public void AddLife()
+    {
+        lives = lives + 1;
+    }
+
 
     public int GetPlayerLives()
     {
@@ -345,17 +403,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         return health;
     }
 
-    public void SetHealth(float inc) 
-    {
-        float x = inc;
-       health = health + x; 
-    }
-
-    public void AddLife ()
-    {
-        lives = lives + 1 ;
-    }
-
     public void SetOrder(int num)
     {
         order = num;
@@ -366,57 +413,32 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         return order;
     }
 
-    public GameObject getShield()
-    {
-        return shield;
-    }
-
-
-    public void Setpoisoned(bool state)
-    {
-        poision = state;
-
-        if (poision == true)
-        {
-            isPoision++;
-            StartCoroutine(endPoison());
-        }
-        else if(isPoision > 0)
-        {
-            isPoision--;
-            //StopCoroutine(endPoison());
-        }
-
-    }
-
     public bool GetPoisoned()
     {
         return poision;
     }
 
-    IEnumerator endPoison()
-    {
-        yield return new WaitForSeconds(9f);
-        if (isPoision > 0)
-        {
-            poision = false;
-            isPoision --;
-        }
-    }
 
-    public void setLivesText() {
+
+    public void setLivesText()
+    {
         livesText.GetComponent<Text>().text = lives.ToString();
     }
 
-    public void displayShield(bool state) {
-        shieldPic.SetActive(state);
+
+    public int GetKill()
+    {
+        return killCount;
     }
 
-    public void displaySlowMo(bool state) {
-        slowMoPic.SetActive(state);
+    public void SetSpawners(GameObject playerSpawn)
+    {
+        SpawnPoints = playerSpawn;
     }
+    public Shooting getShootClass() {
+        return shootClass;
 
-
+    }
 }
 
 

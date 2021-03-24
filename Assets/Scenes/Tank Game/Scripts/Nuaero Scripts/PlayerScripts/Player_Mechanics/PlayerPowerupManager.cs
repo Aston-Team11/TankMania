@@ -66,13 +66,10 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
     /// <param name="powerType">the name of the powerup</param>
     public void PowerupAttained(string powerType)
     {
-        powerUpType = powerType;
-
-        if (!photonView.IsMine) return;
-
         displayShield(false);
         displaySlowMo(false);
 
+        powerUpType = powerType;
         if (powerUpType == "SHIELD")
         {
             displayShield(true);
@@ -80,6 +77,27 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         else if (powerUpType == "SLOMO")
         {
             displaySlowMo(true);
+        }
+        else if (powerUpType == "HealthUp")
+        {
+            //add 10 to the health 
+            this.GetComponent<PlayerManager>().SetHealth(10.0f);
+
+            //issue with not syncing with the health bar 
+        }
+        else if (powerUpType == "AdditionalLife")
+        {
+            //working fine 
+            this.GetComponent<PlayerManager>().AddLife();
+        }
+        else if (powerType == "Shotgun")
+        {
+            this.GetComponent<PlayerManager>().getShootClass().SetShotgun();
+
+        }
+        else if (powerType == "Minigun")
+        {
+            this.GetComponent<PlayerManager>().getShootClass().SetMinigun();
         }
     }
 

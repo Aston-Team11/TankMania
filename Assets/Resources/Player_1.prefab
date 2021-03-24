@@ -6621,6 +6621,9 @@ MonoBehaviour:
   top: {fileID: 4344299635072090000}
   bulletSpeed: 15
   parent: {fileID: 4910122184823306451}
+  ShotgunEnable: 0
+  MinigunEnable: 0
+  PowerupTime: 4.5
   shootAble: 1
   waitBeforeNextShot: 0.25
   Shield: {fileID: 3072165851213700554}
