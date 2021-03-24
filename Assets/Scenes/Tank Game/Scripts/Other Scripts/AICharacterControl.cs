@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-namespace UnityStandardAssets.Characters.ThirdPerson
-{
-    [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
-    [RequireComponent(typeof(ThirdPersonCharacter))]
+
     public class AICharacterControl : MonoBehaviourPunCallbacks
     {
 
@@ -22,8 +19,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private GameObject spawner; //used to access the spawner script 
         public GameObject Blood_Sound_Effect;   // bloodspray sound effect
 
-        public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
-        public ThirdPersonCharacter character { get; private set; } // the character we are controlling                  
+        [SerializeField] private UnityEngine.AI.NavMeshAgent agent;             // the navmesh agent required for the path finding
+        [SerializeField] private ThirdPersonCharacter character;                // the character we are controlling                  
 
 
         public GameObject bombSpray;  //this is the effect of the zombie exploding
@@ -37,7 +34,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         /// </summary>
         public void TargetPlayer1()
         {
-            photonView.RPC("Retarget", RpcTarget.AllViaServer, "1002");
+            photonView.RPC("Retarget", RpcTarget.AllViaServer, "1003");
         }
 
 
@@ -48,7 +45,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         /// <see cref="Spawner.targetPlayer(int)"/> 
         /// </summary>
         /// <param name="Player"></param>
-        public void getPlayers(Transform Player)
+        public void GetPlayers(Transform Player)
         {
             this.target = Player;
         }
@@ -262,4 +259,4 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
         }
     }
-}
+

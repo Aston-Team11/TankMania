@@ -32,21 +32,21 @@ public class Lobby : MonoBehaviourPunCallbacks
         if (!(photonView.IsMine))
         {
             //spawns in each player UI element and assigns a postion based on which player spawned
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && PhotonNetwork.LocalPlayer.ActorNumber == 2)
             {
                 Vector3 pos = new Vector3(-275, -65, 0);
                 myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);
                 playerName = "Player 2: ";
                 photonView.RPC("SyncNames", RpcTarget.AllBuffered, myplayer.GetPhotonView().ViewID, playerName);
             }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 3 && PhotonNetwork.LocalPlayer.ActorNumber == 3)
             {
                 Vector3 pos = new Vector3(200, 65, 0);
                 myplayer = PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);
                 playerName = "Player 3: ";
                 photonView.RPC("SyncNames", RpcTarget.AllBuffered, myplayer.GetPhotonView().ViewID, playerName);
             }
-            else
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 4 && PhotonNetwork.LocalPlayer.ActorNumber == 4)
             {              
                 Vector3 pos = new Vector3(200, -65, 0);          
                 myplayer =  PhotonNetwork.Instantiate("PlayerBtn", pos, transform.rotation);

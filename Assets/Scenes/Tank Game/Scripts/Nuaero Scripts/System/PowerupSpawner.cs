@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-
+/// <summary>
+///  @author Riyad K Rahman <br></br>
+///  handles spawning of powerupboxes 
+/// </summary>
 public class PowerupSpawner : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private GameObject powerBox;
-    [SerializeField] private int BoxCount = 0;
+    [SerializeField] private GameObject powerBox;           //the powerupbox gameobject to be spawned
+    [SerializeField] private int BoxCount = 0;              // the number of boxes currently spawned 
 
-    [SerializeField] private GameObject[] spawners;
-    private float mytime = 0f;
-    private int seconds = 0;
-    private bool spawning = false;
-    private int spawnTime = 20;
+    [SerializeField] private GameObject[] spawners;         //the possible spawn locations of a box 
+    private float myTotalTime = 0f;                         // total time in float
+    private int seconds = 0;                                // total time in seconds
+    private bool spawning = false;                          // bool state which controls when to spawn a powerupbox
+    private int spawnTime = 20;                             // the interval at which a new set of boxes will spawn
 
-    private int playerCount = 0;
+    private int playerCount = 0;                            //the number of players in the room
 
 
     /// <summary>
@@ -36,8 +39,8 @@ public class PowerupSpawner : MonoBehaviourPunCallbacks
         //only the master client handles the time management
         if (!photonView.IsMine) return;
 
-        mytime += Time.deltaTime;
-        seconds = (int) mytime;
+        myTotalTime += Time.deltaTime;
+        seconds = (int) myTotalTime;
 
         //checks if there is already enough boxes per player 
         if (BoxCount < playerCount)

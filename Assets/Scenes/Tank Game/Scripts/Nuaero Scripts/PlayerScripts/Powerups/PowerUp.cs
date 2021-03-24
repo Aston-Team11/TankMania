@@ -11,12 +11,13 @@ using Photon.Pun;
 public class PowerUp : MonoBehaviourPunCallbacks
 {
     [SerializeField] private GameObject explosion;            // the paricle effect for explosion
-    private AudioSource explosion_soundEffect;  // the explosion sound effect for the power up boxes
-    private GameObject mySpawner;
-    private Vector3 descend = new Vector3(0f, -5f, 0f);
+    private AudioSource explosion_soundEffect;                 // the explosion sound effect for the power up boxes
+    private GameObject mySpawner;                              // the powerup spawner 
+    private Vector3 descend = new Vector3(0f, -5f, 0f);        //the rate of descent to be applied when the powerup box spawns in
 
 
     /// <summary>
+    /// @author Riyad K Rahman <br></br>
     /// Finds the audio component to play the explosion sound
     /// </summary>
     public void Start()
@@ -24,6 +25,10 @@ public class PowerUp : MonoBehaviourPunCallbacks
         explosion_soundEffect = GameObject.FindGameObjectWithTag("PowerUpExplosion").GetComponent<AudioSource>();
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// moves the box down until it has reached the floor 
+    /// </summary>
     private void FixedUpdate()
     {
         //drop in the box 

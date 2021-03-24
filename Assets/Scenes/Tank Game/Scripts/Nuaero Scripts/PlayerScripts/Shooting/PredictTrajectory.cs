@@ -5,26 +5,27 @@ using System;
 using Photon.Pun;
 
 
-[RequireComponent(typeof(LineRenderer))]
-
-
+/// <summary>
+/// @author Riyad K Rahman <br></br>
+/// handles Calculations of the trajectory of the bullet
+/// </summary>
 public class PredictTrajectory : MonoBehaviourPunCallbacks
 {
 
-    private LineRenderer line;
-    private Ray ray;
-    private RaycastHit hit;
+    private LineRenderer line;                              // the line component used to illustrate the trajectory
+    private Ray ray;                                        //the ray which is shot from the barrel to be used in trajectory calculations
+    private RaycastHit hit;                                 // the Ray's hit poistion infomation 
     private int rayBounce;
 
-    public int reflections;
-    public float maxLength;
+    public int reflections;                                 //the max number of reflections to calculate the aim for 
+    public float maxLength;                                 // the max length of the line 
 
-    private GameObject cursor;
+    private GameObject mouseReticle;                              //the mouse reticle to calcualte the distance of the line with respect to the current mouse position 
    
 
     public void SetMouseAim(GameObject Mousetarget)
     {
-        cursor = Mousetarget;
+        mouseReticle = Mousetarget;
     }
 
 
@@ -35,6 +36,10 @@ public class PredictTrajectory : MonoBehaviourPunCallbacks
         line = GetComponent<LineRenderer>();
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// calcualtes aim to a max number of <see cref="reflections"/> by shooting a ray and reflecting the ray based on collisions with reflective surfaces 
+    /// </summary>
     private void FixedUpdate()
     {
         if (!photonView.IsMine) return;
@@ -71,7 +76,7 @@ public class PredictTrajectory : MonoBehaviourPunCallbacks
             {
                 try
                 {
-                    float distance = (rayBounce >= 1) ? remainingLength : Vector3.Distance(transform.position, cursor.transform.position);
+                    float distance = (rayBounce >= 1) ? remainingLength : Vector3.Distance(transform.position, mouseReticle.transform.position);
                
 
                 // if no surface at all hit, then carry on line 

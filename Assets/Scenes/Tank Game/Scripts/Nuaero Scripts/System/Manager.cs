@@ -5,7 +5,10 @@ using Photon.Pun;
 using System;
 using UnityEngine.SceneManagement;
 
-
+/// <summary>
+///  @author Riyad K Rahman <br></br>
+///  handles spawning players and ending the game across all clients 
+/// </summary>
 public class Manager : MonoBehaviourPunCallbacks
 {
     
@@ -15,12 +18,14 @@ public class Manager : MonoBehaviourPunCallbacks
     public GameObject time;
     #endregion
 
-    [SerializeField] private int gameMode;
-    public GameObject mycam;
+    #region Gamemode
+    [Header("Gamemode attributes")]
+    [SerializeField] private int gameMode;                  // the currently active gamemode
+    [SerializeField] private Gamemode gmclass;             // the gamemode class, which handles enabling and sending appropraite data to objects of the associated gamemode
+    private Launcher launcher;                             // the shared gameobject across all clients. holds data about which gamemode was selected 
+    #endregion
 
-    [SerializeField] private Gamemode gmclass;
-    private AudioSource bgMusic;
-    private Launcher launcher;
+    public GameObject mycam;                                // the shared scene camera
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
@@ -35,8 +40,6 @@ public class Manager : MonoBehaviourPunCallbacks
         {
             gmclass.StartPVE(gameMode);
         }
-        bgMusic = GetComponent<AudioSource>();
-
         StartCoroutine(SpawnPlayer());
     }
 
@@ -49,26 +52,26 @@ public class Manager : MonoBehaviourPunCallbacks
     /// <returns>player transform so that the enemies can find the player </returns>
     private IEnumerator SpawnPlayer()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         mycam.SetActive(false);
 
-        GameObject newplayer = new GameObject(); 
+        GameObject newplayer = new GameObject();
+
 
         if (!(photonView.IsMine))
         {
             //sets different colour presets for each tank
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && PhotonNetwork.LocalPlayer.ActorNumber == 2)
             {
                 newplayer = PhotonNetwork.Instantiate("Player_2", playerSpawns[gameMode].transform.GetChild(1).transform.position, playerSpawns[gameMode].transform.GetChild(1).transform.rotation);
             }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 3 && PhotonNetwork.LocalPlayer.ActorNumber == 3)
             {
                 newplayer = PhotonNetwork.Instantiate("Player_3", playerSpawns[gameMode].transform.GetChild(2).transform.position, playerSpawns[gameMode].transform.GetChild(2).transform.rotation);
             }
-            else
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 4 && PhotonNetwork.LocalPlayer.ActorNumber == 4)
             {
                 newplayer = PhotonNetwork.Instantiate("Player_4", playerSpawns[gameMode].transform.GetChild(3).transform.position, playerSpawns[gameMode].transform.GetChild(3).transform.rotation);
-              
             }
         }
 
@@ -82,17 +85,17 @@ public class Manager : MonoBehaviourPunCallbacks
 
         }
 
-        newplayer.name = newplayer.GetPhotonView().ViewID.ToString();
+        //newplayer.name = newplayer.GetPhotonView().ViewID.ToString();
         newplayer.SendMessage("setTimeObject", time);
         newplayer.GetComponent<PlayerManager>().GameModeSetup(gameMode);
 
-        //sync zombie spawner if gamemode is pve 
+        //sync zombie spawner if gamemode is currently pve 
         if (gameMode == 0)
         {
             photonView.RPC("SyncLists", RpcTarget.AllBuffered, newplayer.GetPhotonView().ViewID);
         }
 
-        // set spawnpoints if gamemode is ffa
+        // set ffa spawnpoints if gamemode is currently ffa
         else if (gameMode == 1)
         {
             newplayer.GetComponent<PlayerManager>().SetSpawners(playerSpawns[gameMode]);

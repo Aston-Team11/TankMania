@@ -4,24 +4,29 @@ using UnityEngine;
 using Photon.Pun;
 using System;
 
-[RequireComponent(typeof(Rigidbody))]
-
+/// <summary>
+///  @author Riyad K Rahman <br></br>
+///  handles player movement of the main tank body and drifting calculations 
+/// </summary>
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-    private Rigidbody rb;
+    private Rigidbody rb;                               //the rigidbody component of the player 
 
-    public float acceleration, torqueForce;
-    private float defaultRotate, defaultSpeed;
-    private bool IsInputEnabled = true;
+    public float acceleration, torqueForce;             // the acceleration and drifting force to be applied to the tank 
+    private float defaultRotate, defaultSpeed;          // values to adjust acceleration and drifting force  when time is slowed
+    private bool IsInputEnabled = true;                 // a boolean to check if any user input should be applied
 
-    public float steering;
-    public Vector2 direction;
+    private float steeringOffset = 15;                         //an offset to be applied when rotating the player 
+    public Vector2 direction;                                 // the direction of hte player's inputs 
   
-    public GameObject parentCam;
-    [SerializeField] private AudioSource engine;
-    [SerializeField] private float audioOffset; 
- 
+    public GameObject parentCam;                            //the camera of the player
+    [SerializeField] private AudioSource engine;           //the engine sound which adjusts when the player moves 
+    [SerializeField] private float audioOffset;            //the offset at which the pitch of the engine sound should be adjusted (mimics reving sound)
 
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  initialses default values and sets the player's camera to look at this player 
+    /// </summary>
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -51,21 +56,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     }
 
 
-
-
-    // Update is called once per frame
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  gets player's inputs every frame 
+    /// </summary>
     private void Update()
     {
         // check if player view is this player
         if (!photonView.IsMine) return;
         if(!IsInputEnabled) return;
         direction.x = Input.GetAxisRaw("Vertical");
-        direction.y = Input.GetAxisRaw("Horizontal") * steering;
+        direction.y = Input.GetAxisRaw("Horizontal") * steeringOffset;
       
     }
 
-
-    //handles physics
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  handles physics applied to the tank body 
+    /// </summary>
     private void FixedUpdate()
     {
         // check if player view is this player
