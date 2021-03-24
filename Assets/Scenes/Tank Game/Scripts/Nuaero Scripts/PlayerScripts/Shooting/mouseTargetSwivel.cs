@@ -4,30 +4,28 @@ using UnityEngine;
 using Photon.Pun;
 using System;
 
+/// <summary>
+/// @author Riyad K Rahman <br></br>
+/// Handels rotating the top of the tank according to the mouse position 
+/// </summary>
 public class mouseTargetSwivel : MonoBehaviourPunCallbacks
 {
-    private Vector3 target;
-    private GameObject crosshair;
-    public GameObject swivelTop;
+    private Vector3 target;                             // the position of the mouse
+    private GameObject reticle;                         //the mouse reticle in game,which aligns with the position of the mouse  
+    public GameObject swivelTop;                        //the top of the tank including the barrel
 
-    private RaycastHit hit;
-  //  public GameObject parent;
+    private RaycastHit hit;                             //a raycast used to determine the position of the mouse 
 
     public void SetMouseAim(GameObject Mousetarget)
     {
-        crosshair = Mousetarget;
+        reticle = Mousetarget;
     }
 
 
-
-    void Start()
-    {
-         //Cursor.visible = false;
-        //crosshair.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
-       
-    }
-
-    // Update is called once per frame
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// moves the top of the tank according to the position of the mouse in game 
+    /// </summary>
     void FixedUpdate()
     {
         if (!photonView.IsMine) return;
@@ -47,7 +45,7 @@ public class mouseTargetSwivel : MonoBehaviourPunCallbacks
         try
         {
             // visualise mouse cursor with target position
-            crosshair.GetComponent<Rigidbody>().MovePosition(target);
+            reticle.GetComponent<Rigidbody>().MovePosition(target);
 
             // sviwel the tank's top to the mouse target position
             Vector3 difference = target - swivelTop.transform.position;

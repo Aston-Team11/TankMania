@@ -2,28 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// @author Riyad K Rahman , Anil Virk <br></br>
-/// Handles spawning of zombies
+/// Handles spawning of zombies and intialising a target for newly spawned zombies 
 /// </summary>
 public class Spawner : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private int waveNumber = 0;
-    [SerializeField] private int enemySpawnAmount = 0;
-    [SerializeField] private int enemiesKilled = 0;
+    [SerializeField] private int waveNumber = 0;                //current wave number 
+    [SerializeField] private int enemySpawnAmount = 0;          //number of enemies which should be spawned 
+    [SerializeField] private int enemiesKilled = 0;             //number of enemies killed  
 
 
-    public GameObject[] spawners;
-    public GameObject enemy;
-    public GameObject target;
-    public int Spawncount = 4;
-    private int maxwaveNumber = 10;
+    public GameObject[] spawners;                               //spawnpoints of the zombies
+    public GameObject enemy;                                    //the zombie gameobject
+    public GameObject target;                                   //the target player for the zombies 
+    public int Spawncount = 4;                                  // the number of zombies currently spawned 
+    private int maxwaveNumber = 10;                             //the max wave count until the game ends 
 
-    [SerializeField] private List<GameObject> PlayerLists = new List<GameObject>();
+    [SerializeField] private List<GameObject> PlayerLists = new List<GameObject>();  // a list of players 
 
     /// <summary>
     /// @author Riyad K Rahman, Anil Virk <br></br>
+    /// increment enemy killcount and sync's across all clients 
     /// </summary>
     public void IncrementEnemies()
     {
@@ -37,22 +39,7 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Anil Virk <br></br>
-    /// </summary>
-    public int getWave()
-    {
-        return waveNumber;
-    }
-
-    /// <summary>
-    /// @author Anil Virk <br></br>
-    /// </summary>
-    public int getRemaining()
-    {
-        return enemySpawnAmount - enemiesKilled;
-    }
-
-    /// <summary>
-    /// @author Anil Virk <br></br>
+    /// intialises variables to thier default value 
     /// </summary>
     void Start()
     {
@@ -74,6 +61,7 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman, Anil Virk <br></br>
+    /// if the zombies in the current wave have all been killed then the next wave of zombies spawn
     /// </summary>
     void Update()
     {
@@ -89,9 +77,8 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
-    /// Handles spawning of zombies
+    /// syncs wave number across all clients
     /// </summary>
-    // update stats on everyone's screens
     [PunRPC]
      private void SyncWave(int wave)
       {
@@ -100,9 +87,8 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
-    /// Handles spawning of zombies
+    /// syncs zombie's killed across all clients
     /// </summary>
-    // update stats on everyone's screens
     [PunRPC]
     private void SyncDeathCount(int killed)
     {
@@ -112,6 +98,7 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman, Anil Virk <br></br>
+    /// spawns in next wave of zombies 
     /// </summary>
     private void NextWave()
     {
@@ -136,12 +123,13 @@ public class Spawner : MonoBehaviourPunCallbacks
     }
     /// <summary>
     /// @author Riyad K Rahman <br></br>
-    /// Handles spawning of zombies
+    /// Handles ending the game for all clients
     /// </summary>
     [PunRPC]
     private void Endgame()
     {
-        PhotonNetwork.LoadLevel("EndGame");
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("Endgame", LoadSceneMode.Single);
     }
 
     /// <summary>
@@ -166,6 +154,7 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
+    /// adds a player to the playerlist 
     /// </summary>
     /// <param name="player"></param>
     public void addPlayer(GameObject player)
@@ -183,7 +172,7 @@ public class Spawner : MonoBehaviourPunCallbacks
     }
     /// <summary>
     /// @author Riyad K Rahman <br></br>
-    /// Handles spawning of zombies
+    /// removes player from the playerlist
     /// </summary>
     public void RemovePlayer(GameObject player)
     {
@@ -194,9 +183,10 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
+    /// sorts players based on thier order number 
     /// </summary>
-    /// <param name="p1"></param>
-    /// <param name="p2"></param>
+    /// <param name="p1">player gameobject</param>
+    /// <param name="p2">player gameobject</param>
     /// <returns></returns>
     private int sortFunction(GameObject p1, GameObject p2)
     {
@@ -222,18 +212,33 @@ public class Spawner : MonoBehaviourPunCallbacks
     public void randomiseSelection()
     {
         photonView.RPC("targetPlayer", RpcTarget.AllBuffered, Random.Range(0, PlayerLists.Count));
-        //targetPlayer(Random.Range(0, PlayerLists.Count));
     }
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
-    /// Handles spawning of zombies
+    /// Handles targeting a player to newly spawned zombies 
     /// </summary>
     [PunRPC]
     private void targetPlayer(int result)
     {
         target = PlayerLists[result];
-        enemy.GetComponent<UnityStandardAssets.Characters.ThirdPerson.AICharacterControl>().getPlayers(target.transform);
+       enemy.GetComponent<AICharacterControl>().GetPlayers(target.transform);
+    }
+
+    /// <summary>
+    /// @author Anil Virk <br></br>
+    /// </summary>
+    public int getWave()
+    {
+        return waveNumber;
+    }
+
+    /// <summary>
+    /// @author Anil Virk <br></br>
+    /// </summary>
+    public int getRemaining()
+    {
+        return enemySpawnAmount - enemiesKilled;
     }
 
 }

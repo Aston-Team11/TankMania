@@ -265,6 +265,8 @@ MonoBehaviour:
   dist: 0
   poisonCloudSpawnRate: 15
   Blood_Sound_Effect: {fileID: 0}
+  agent: {fileID: 306437902164725583}
+  character: {fileID: 306437902164725569}
   bombSpray: {fileID: 816811174849011688, guid: b27e07517c293e245975d8e89543411a,
     type: 3}
   radiation: {fileID: 4444439791267116266, guid: 9a2ab34c94c9a794b8036bf138751654,
@@ -290,6 +292,9 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 0.4
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.2
+  m_Rigidbody: {fileID: 306437902164725581}
+  m_Animator: {fileID: 306437902164725578}
+  m_Capsule: {fileID: 306437902164725580}
 --- !u!114 &-8232253789424187275
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5743,7 +5743,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acceleration: 200
   torqueForce: 3.5
-  steering: 10
   direction: {x: 0, y: 0}
   parentCam: {fileID: 2308331000217148019, guid: f676883ed7f6e2041a1566858f2f4739,
     type: 3}
@@ -5770,7 +5769,7 @@ MonoBehaviour:
   health: 100
   healthB: {fileID: 3350756239286400328}
   poision: 0
-  isPoision: 0
+  isPoisionCount: 0
   explosion: {fileID: 1804206099813350, guid: 4dd02b5f854b6c84990fbeb810abffe4, type: 3}
   mouseTarget: {fileID: 1468281668505780495, guid: 7f7a0c76e6abf854999da7badbecc71c,
     type: 3}

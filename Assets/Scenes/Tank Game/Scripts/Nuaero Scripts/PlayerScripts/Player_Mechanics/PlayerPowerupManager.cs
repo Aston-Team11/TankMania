@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+/// <summary>
+///  @author Riyad K Rahman <br></br>
+///  manages use of powerups and UI components related to powerups 
+/// </summary>
 public class PlayerPowerupManager : MonoBehaviourPunCallbacks
 {
     #region Powerups
@@ -18,7 +22,10 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject shieldPic, slowMoPic;   //Icons on canvas to indicate which powerup the player has 
     #endregion
 
-    // Update is called once per frame
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  triggers a powerup when a player presses space
+    /// </summary>
     void Update()
     {
         if (!photonView.IsMine) return;
@@ -40,6 +47,10 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  spawns a shield across all clients 
+    /// </summary>
     [PunRPC]
     public void spawnShield()
     {
@@ -48,12 +59,20 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         powerUpType = "";
     }
 
-
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  sets the appropriate UI element to active depending on which powerup was attanied  
+    /// </summary>
+    /// <param name="powerType">the name of the powerup</param>
     public void PowerupAttained(string powerType)
     {
+        powerUpType = powerType;
+
+        if (!photonView.IsMine) return;
+
         displayShield(false);
         displaySlowMo(false);
-        powerUpType = powerType;
+
         if (powerUpType == "SHIELD")
         {
             displayShield(true);

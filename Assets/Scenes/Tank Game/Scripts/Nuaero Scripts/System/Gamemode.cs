@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+/// <summary>
+///  @author Riyad K Rahman <br></br>
+///  Handles enabling and sending appropraite data to objects of the associated gamemode
+/// </summary>
 public class Gamemode : MonoBehaviourPunCallbacks
 {
     #region PVE
@@ -55,7 +59,7 @@ public class Gamemode : MonoBehaviourPunCallbacks
         for (int i = 0; i < 5; i++)
         {
             var zombie = PhotonNetwork.Instantiate(Enemy, SpawnPointEnemy.position, SpawnPointEnemy.rotation);
-            //zombie.GetComponent<UnityStandardAssets.Characters.ThirdPerson.AICharacterControl>().TargetPlayer1();
+            zombie.GetComponent<AICharacterControl>().TargetPlayer1();
         }
     }
 

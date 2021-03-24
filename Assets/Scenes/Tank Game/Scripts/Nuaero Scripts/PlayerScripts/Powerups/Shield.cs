@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+/// <summary>
+/// @author Riyad K Rahman <br></br>
+/// handles the dissolving animation for the shield
+/// </summary>
 public class Shield : MonoBehaviourPunCallbacks
 {
-    public GameObject player;
-    Renderer rend;
-    public Material[] mats;
+    public GameObject player;                           //the owner of this shield 
+    Renderer rend;                                      //the renderer component of the shield 
+    public Material[] mats;                             // the materials assoicated to the shield
 
-    float bright;
-    bool change, disabled, disabled2= false;
-    Rigidbody rb;
+    float bright;                                           //the brightness of the shield
+    bool change, triggerDissolve, triggerDestroy= false;    //the triggers to change the state of the animation
+    Rigidbody rb;                                           // the rigidbody component of this shield
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// ignores collisions between the shields owner and itself
+    /// </summary>
     private void Start()
     {
         Physics.IgnoreCollision(this.GetComponent<Collider>(), player.GetComponent<Collider>());
-        //!!!! if probelms with shield persist then delete above line
+        //!!!! if collisions with shield and player persist then delete above line
     }
 
 
@@ -30,24 +38,18 @@ public class Shield : MonoBehaviourPunCallbacks
         transform.position = player.transform.position;
     }
 
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  manages the behaviour of what to do when colliding with different gameobjects 
+    /// </summary>
+    /// <param name="collision">the collider component of a gameobject </param>
     private void OnCollisionEnter(Collision collision)
     {
+        //only let other players in the shield
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "PlayerAddOns")
         {
             Physics.IgnoreCollision(collision.collider, gameObject.GetComponent<Collider>());
 
-        }
-
-        if (collision.gameObject.tag == "Bullet")
-        {
-            Debug.Log("bullet hit shield");
-          
-        }
-
-        else if (collision.gameObject.tag == "Enemy")
-        {
-            Debug.Log("zap an enemy");
-          
         }
     }
 
@@ -57,7 +59,11 @@ public class Shield : MonoBehaviourPunCallbacks
         FXAnimation();
     }
 
-
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  makes the shield more birghter until a max brightness is reached,
+    ///  then calls <see cref="slowlyDestroy"/> to dissolve and destroy the shield
+    /// </summary>
     public void FXAnimation()
     {
         //changes fernal and offset, to look like shield is charging up and becoming more solid 
@@ -81,6 +87,11 @@ public class Shield : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// Resets shield's material values 
+    /// </summary>
+    /// <param name="val">default value of the brightness that should be set </param>
     public void resetFernal(float val)
     {
         //set brightness values
@@ -98,19 +109,23 @@ public class Shield : MonoBehaviourPunCallbacks
 
         //RE-enable rigidbody and animation variables
         change = false;
-        disabled= false;
-        disabled2 = false;
+        triggerDissolve= false;
+        triggerDestroy = false;
 
        
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// a server function to ensure everyone runs the dissolving animation of this shield
+    /// </summary>
     [PunRPC]
     private void slowlyDestroy()
     {
        
         // changing brightness
         var fernal = mats[1].GetFloat("Vector1_7AFF87E4");
-        if (fernal < 2.37f && disabled == false)
+        if (fernal < 2.37f && triggerDissolve == false)
         {
             fernal += 0.4f * Time.fixedDeltaTime;
             mats[1].SetFloat("Vector1_7AFF87E4", fernal);
@@ -118,12 +133,12 @@ public class Shield : MonoBehaviourPunCallbacks
 
         else
         {
-            disabled = true;
+            triggerDissolve = true;
         }
 
         //changing dissolve values so the shield dissovles away before being disabled
         var dissolve = mats[1].GetFloat("Vector1_2E8A09FF");
-        if (dissolve > -0.9f && disabled2 == false)
+        if (dissolve > -0.9f && triggerDestroy == false)
         {
             dissolve -= 0.6f * Time.fixedDeltaTime;
             mats[1].SetFloat("Vector1_2E8A09FF", dissolve);
@@ -131,7 +146,7 @@ public class Shield : MonoBehaviourPunCallbacks
 
         else
         {
-            disabled2 = true;
+            triggerDestroy = true;
             Debug.Log("Destroy SHIELD");
             gameObject.SetActive(false);
 
@@ -139,7 +154,10 @@ public class Shield : MonoBehaviourPunCallbacks
      
     }
 
-    //tell everyone the shield is gone
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// a server function to inform to everyone the shield is disabled
+    /// </summary>
     [PunRPC]
     public void sendtoServer()
     {
@@ -152,13 +170,6 @@ public class Shield : MonoBehaviourPunCallbacks
     {
         return player.GetComponent<PhotonView>().ViewID;
     }
-
-
-   //private void OnEnable()
-   //{
-   //         Rigidbody rb = gameObject.GetComponentInParent(typeof(Rigidbody)) as Rigidbody;
-   //         rb.constraints = RigidbodyConstraints.FreezeAll;
-   //}
 
 }
 

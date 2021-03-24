@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+/// <summary>
+/// @author Riyad K Rahman <br></br>
+/// Handles shooting mechanic of the player (how bullets should be instantiated)
+/// </summary>
 public class Shooting : MonoBehaviourPunCallbacks
 {
-    public GameObject theBullet;
-    public GameObject top;
-   // public Material bulletColour;
+    public GameObject theBullet;                        //the bullet to be fired 
+    public GameObject top;                              //used to get the position and rotation of the tank barrel
 
-    public int bulletSpeed;
-    // the player who shot the bullet is the parent
-    public GameObject parent;
 
-    public bool shootAble = true;
-    public float waitBeforeNextShot = 0.25f;
-    public GameObject Shield;
+    public int bulletSpeed;                            // the speed of the bullet 
+    public GameObject parent;                          // the player who shot the bullet 
 
-    private AudioSource tank_shootingSound;
-    public ParticleSystem muzzleFlash;
+    public bool shootAble = true;                      //used to handle reloading 
+    public float waitBeforeNextShot = 0.25f;           //the time for reload
+    public GameObject Shield;                          // the local player's shield (used to disable collisions)
+
+    private AudioSource tank_shootingSound;            // the bullet shooting sound
+    public ParticleSystem muzzleFlash;                 // a muzzleflash particle effect to be instantiated per shot 
 
 
 
@@ -32,6 +35,11 @@ public class Shooting : MonoBehaviourPunCallbacks
         tank_shootingSound = GetComponent<AudioSource>();
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// checks for player's input on mouse button or left Ctrl key.
+    /// and sends a server function <see cref="Shoot"/> to shoot an appropraite bullet
+    /// </summary>
     private void Update()
     {
         if (!photonView.IsMine) return;
@@ -54,6 +62,10 @@ public class Shooting : MonoBehaviourPunCallbacks
 
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// </summary>
+    /// <returns>waits for a reload time, then sets <see cref="shootAble"/> to true</returns>
     IEnumerator ShootingYield()
     {
         yield return new WaitForSeconds(waitBeforeNextShot);
