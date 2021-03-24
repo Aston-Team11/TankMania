@@ -54,8 +54,13 @@ public class PowerUp : MonoBehaviourPunCallbacks
             photonView.RPC("Explode", RpcTarget.AllBuffered);
         }
 
+  
+
+
     }
 
+   
+    
     /// <summary>
     /// @author Riyad K Rahman <br></br>
     /// This gameObject is exploded and a server message (<see cref="sendDestroy"/> is sent to destroy the box for all players
@@ -107,7 +112,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
             return;
         }
 
-        double result = Random.Range(1, 3);
+        double result = Random.Range(1, 7);
 
         switch (result)
         {
@@ -120,6 +125,26 @@ public class PowerUp : MonoBehaviourPunCallbacks
                 player.SendMessage("PowerupAttained", "SHIELD");
                 Debug.Log("SENT SHIELD");
                 break;
+
+            case 3:
+               player.SendMessage("PowerupAttained", "HealthUp");
+               Debug.Log("Health up by 10 ");
+                break ;
+
+            case 4:
+                player.SendMessage("PowerupAttained", "AdditionalLife");
+                Debug.Log("Extra Life");
+                break;
+
+            case 5:
+                player.SendMessage("PowerupAttained", "Shotgun");
+                Debug.Log("Shotgun Attained");
+                break;
+
+            case 6:
+                player.SendMessage("PowerupAttained", "Minigun");
+                Debug.Log("Minigun Attained");
+                break; 
 
             default:
                 print("ErROR No PoWEr uP FouNd");

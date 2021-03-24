@@ -15,6 +15,12 @@ public class Shooting : MonoBehaviourPunCallbacks
 
     public int bulletSpeed;                            // the speed of the bullet 
     public GameObject parent;                          // the player who shot the bullet 
+    public bool shootAble = true;
+    public bool ShotgunEnable = false;
+    public bool MinigunEnable = false; 
+    public float waitBeforeNextShot = 0.25f;
+    public float PowerupTime = 4.5f;
+    public GameObject Shield;
 
     public bool shootAble = true;                      //used to handle reloading 
     public float waitBeforeNextShot = 0.25f;           //the time for reload
@@ -22,6 +28,8 @@ public class Shooting : MonoBehaviourPunCallbacks
 
     private AudioSource tank_shootingSound;            // the bullet shooting sound
     public ParticleSystem muzzleFlash;                 // a muzzleflash particle effect to be instantiated per shot 
+
+    
 
 
 
@@ -44,20 +52,51 @@ public class Shooting : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine) return;
 
-        if (Input.GetButtonDown("Fire1"))
-        {
 
-            if (shootAble)
+        if (Input.GetButton("Fire1"))
+        {
+            if (shootAble && MinigunEnable)
             {
                 shootAble = false;
                 //AudioSource for the tank shooting 
                 tank_shootingSound.Play();
                 // send shoot function for every player
                 photonView.RPC("Shoot", RpcTarget.All);
-      
-                StartCoroutine(ShootingYield());
-               muzzleFlash.Play();
+
+                StartCoroutine(MinigunYield());
+                StartCoroutine(MinigunDisable());
+                muzzleFlash.Play();
             }
+        }
+        if (Input.GetButtonDown("Fire1"))
+        {
+           
+             if (shootAble && ShotgunEnable)
+            {
+                shootAble = false;
+                //AudioSource for the tank shooting 
+                tank_shootingSound.Play();
+                // send shoot function for every player
+                photonView.RPC("Shotgun", RpcTarget.All);
+
+                StartCoroutine(ShootingYield());
+                StartCoroutine(ShotgunDisable());
+                muzzleFlash.Play();
+
+            }
+            else if (shootAble)
+            {
+                shootAble = false;
+                //AudioSource for the tank shooting 
+                tank_shootingSound.Play();
+                // send shoot function for every player
+                photonView.RPC("Shoot", RpcTarget.All);
+
+                StartCoroutine(ShootingYield());
+                muzzleFlash.Play();
+            }
+
+  
         }
 
     }
@@ -72,6 +111,11 @@ public class Shooting : MonoBehaviourPunCallbacks
         shootAble = true;
     }
 
+    IEnumerator MinigunYield() 
+    {
+        yield return new WaitForSeconds(0.1f);
+        shootAble = true;
+    }
     /// <summary>
     /// @author Riyad K Rahman <br></br>
     ///  bullets are instantiated only by the person who shoots 
@@ -79,27 +123,114 @@ public class Shooting : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Shoot()
     {
-            Quaternion rot = top.transform.rotation;
-            float angle = 90 * Mathf.Deg2Rad;
 
-            rot.Set(rot.x, rot.y, angle, 1);
-            var bullet = Instantiate(theBullet, transform.position, rot);
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        // Quaternion rot = transform.rotation;
 
-            if (Shield.activeSelf)
+        //  Quaternion rotation = 
+        // rotation = new vector1(rot.x, rot.y, rot.z + 180);
+
+  
+       // float angle = 90 * Mathf.Deg2Rad;
+      
+       // rot.Set(rot.x, rot.y, angle, 1);
+
+        
+        var bullet = Instantiate(theBullet, transform.position, top.transform.rotation );
+
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+
+        if (Shield.activeSelf)
+        
             {
-                Physics.IgnoreCollision(bullet.GetComponent<Collider>(), Shield.GetComponent<Collider>(), true);
+             Physics.IgnoreCollision(bullet.GetComponent<Collider>(), Shield.GetComponent<Collider>(), true);
+             
             }
 
 
-            rb.AddForce(transform.forward * bulletSpeed, ForceMode.Impulse);
+         rb.AddForce(transform.forward * bulletSpeed, ForceMode.Impulse);
 
-            bullet.SendMessage("SetPlayerID", parent.gameObject.name);
-   
+
+        bullet.SendMessage("SetPlayerID", parent.gameObject.name);
+
         //!!!! space for fx
     }
 
+    [PunRPC]
+    public void Shotgun()
+    {
+        //posititoning for the vectors of the two new bullets 
 
+        Vector3 leftpos = transform.position;
+        Vector3 rightpos = transform.position;
+        leftpos.x = leftpos.x + -1f;
+        rightpos.x = rightpos.x + 1f;
+
+        //creating the bullets
+
+        var bullet = Instantiate(theBullet, transform.position, top.transform.rotation);
+        var bullet2 = Instantiate(theBullet, leftpos, (top.transform.rotation * Quaternion.Euler(0, 45f, 0)));
+        var bullet3 = Instantiate(theBullet, rightpos, (top.transform.rotation * Quaternion.Euler(0, 315f, 0)));
+
+        //giving all 3 bullets rigid body properties
+
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        Rigidbody rb2 = bullet2.GetComponent<Rigidbody>();
+        Rigidbody rb3 = bullet3.GetComponent<Rigidbody>();
+
+        if (Shield.activeSelf)
+        {
+             Physics.IgnoreCollision(bullet.GetComponent<Collider>(), Shield.GetComponent<Collider>(), true);
+        }
+
+        //adding the movement of all the bullets 
+
+        rb.AddForce(transform.forward * bulletSpeed, ForceMode.Impulse);
+        rb2.AddForce(transform.forward * bulletSpeed, ForceMode.Impulse);
+        rb3.AddForce(transform.forward * bulletSpeed, ForceMode.Impulse);
+
+        bullet.SendMessage("SetPlayerID", parent.gameObject.name);
+        bullet2.SendMessage("SetPlayerID", parent.gameObject.name);
+        bullet3.SendMessage("SetPlayerID", parent.gameObject.name);
+
+        //!!!! space for fx
+    }
+
+    [PunRPC]
+    public void Minigun()
+    {
+
+        var bullet = Instantiate(theBullet, transform.position, top.transform.rotation);
+
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+
+        if (Shield.activeSelf)
+        {
+            Physics.IgnoreCollision(bullet.GetComponent<Collider>(), Shield.GetComponent<Collider>(), true);
+        }
+
+
+        rb.AddForce(transform.forward * bulletSpeed, ForceMode.Impulse);
+
+
+        bullet.SendMessage("SetPlayerID", parent.gameObject.name);
+
+        //!!!! space for fx
+    }
+
+    //method to which enables shotgun mode 
+    public void SetShotgun()
+    {
+        ShotgunEnable = true;
+        MinigunEnable = false; 
+    }
+
+    public void SetMinigun() 
+    {
+        MinigunEnable = true;
+        ShotgunEnable = false;
+    }
     /// <summary>
     /// @author Riyad K Rahman <br></br>
     /// when a player respawns, shooting is set to enabled
@@ -107,8 +238,19 @@ public class Shooting : MonoBehaviourPunCallbacks
     public void SetShoot(bool val)
     {
         shootAble = val;
+
     }
 
+    //timing of how long the powerups last
+    IEnumerator ShotgunDisable()
+    {
+        yield return new WaitForSeconds(PowerupTime);
+        ShotgunEnable = false;
+    }
 
-
+    IEnumerator MinigunDisable()
+    {
+        yield return new WaitForSeconds(PowerupTime);
+        MinigunEnable = false;
+    }
 }
