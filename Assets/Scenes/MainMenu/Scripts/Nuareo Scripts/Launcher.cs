@@ -15,6 +15,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField]private string roomName;                      //the 5 letter roomname which is to be randomly generated 
     static private string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";   // characters to choose from to generate a room name
     [SerializeField] private int gameMode;                        // the gamemode selected 
+    private bool testing = false;
+
 
     private void Awake()
     {
@@ -78,8 +80,16 @@ public class Launcher : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel(3);
-        base.OnJoinedRoom();
+        if (testing == false)
+        {
+            PhotonNetwork.LoadLevel(3);
+            base.OnJoinedRoom();
+        }
+        else
+        {
+            PhotonNetwork.LoadLevel(4);
+            base.OnJoinedRoom();
+        }
     }
 
 
@@ -123,6 +133,11 @@ public class Launcher : MonoBehaviourPunCallbacks
         return this.gameMode; 
     }
 
+
+    public void SetTesting(bool state)
+    {
+        testing = state;
+    }
 }
 
 

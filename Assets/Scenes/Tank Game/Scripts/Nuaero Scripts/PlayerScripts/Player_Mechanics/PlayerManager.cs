@@ -15,7 +15,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject pve, ffa;                   //two different UI setups
     [SerializeField] private Text ffaKills;                         //killCount in UI
     private GameObject SpawnPoints;                                 //holds different spawn points a player can spawn from 
-
     #region Health
     [Header("Health Management")]
     [SerializeField] private float health;                          //health of player
@@ -227,18 +226,18 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnDisable()
     {
-        //enable balloon
-        Balloon.SetActive(true);
+            //enable balloon
+            Balloon.SetActive(true);
 
-        //reset health bar 
-        healthB.GetComponent<HealthBar>().SetMaxHealth(100);
+            //reset health bar 
+            healthB.GetComponent<HealthBar>().SetMaxHealth(100);
 
-        //enable bool val
-        respawning = true;
+            //enable bool val
+            respawning = true;
 
-        //begin respawn (5 seconds)
-        InvokeRepeating("startRespawn", 5f, 100f);
-
+            //begin respawn (5 seconds)
+            InvokeRepeating("startRespawn", 5f, 100f);
+        
     }
 
     /// <summary>
@@ -423,6 +422,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public void SetSpawners(GameObject playerSpawn)
     {
         SpawnPoints = playerSpawn;
+    }
+
+    public GameObject GetFFACanvas()
+    {
+       return ffa ;
+    }
+
+    public GameObject GetPVECanvas()
+    {
+        return pve;
     }
 }
 
