@@ -87,8 +87,7 @@ public class Lobby : MonoBehaviourPunCallbacks
             }
            PhotonNetwork.LoadLevel(4);
         }
-
-    }
+    }  
 
 
     /// <summary>
@@ -208,6 +207,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     public void quit()
     {
         PhotonNetwork.Disconnect();
+        Destroy(GameObject.Find("Launcher"));
         SceneManager.LoadScene(2, LoadSceneMode.Single);
     }
 

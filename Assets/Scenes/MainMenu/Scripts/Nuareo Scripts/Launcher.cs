@@ -12,36 +12,39 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class Launcher : MonoBehaviourPunCallbacks
 {
-    [SerializeField]private string roomName;                      //the 5 letter roomname which is to be randomly generated 
+    [SerializeField] private string roomName;                      //the 5 letter roomname which is to be randomly generated 
     static private string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";   // characters to choose from to generate a room name
     [SerializeField] private int gameMode;                        // the gamemode selected 
     private bool testing = false;
-
+    private int RTT;
 
     private void Awake()
     {
-        StartCoroutine(AwakeDelay());
+        //StartCoroutine(AwakeDelay());
+        PhotonNetwork.GameVersion = "1.0.0";
+        PhotonNetwork.ConnectUsingSettings();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+       // DontDestroyOnLoad(this.gameObject);
     }
 
-    public void OnClickCreate() 
+    public void OnClickCreate()
     {
-        PhotonNetwork.ConnectUsingSettings();   // Connect to server (Settings: APP ID, Region, Server Address) calls OnConnectedToMaster()
+      //  PhotonNetwork.ConnectUsingSettings();   // Connect to server (Settings: APP ID, Region, Server Address) calls OnConnectedToMaster()
         StartCoroutine(roomCreate());           // Call roomCreate()
     }
 
 
-     public void OnClickJoin(string roomName)
-     {
+    public void OnClickJoin(string roomName)
+    {
         PhotonNetwork.ConnectUsingSettings();
         this.roomName = roomName;
         StartCoroutine(JoinRoom());
-         
-     }
+
+    }
 
     /// <summary>
     /// @author Balraj Bains <br></br>
@@ -49,7 +52,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     /// </summary>
     public IEnumerator roomCreate()
     {
-        yield return new WaitForSeconds(3); 
+        RTT = PhotonNetwork.GetPing();
+        yield return new WaitForSeconds((RTT/10));
         CreateRoom();
     }
 
@@ -59,7 +63,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     /// </summary>
     public IEnumerator JoinRoom()
     {
-        yield return new WaitForSeconds(3); //
+ 
+        RTT = PhotonNetwork.GetPing();
+        yield return new WaitForSeconds((RTT/10)); //
         PhotonNetwork.JoinRoom(roomName);
     }
 
@@ -67,12 +73,14 @@ public class Launcher : MonoBehaviourPunCallbacks
     /// @author Riyad K Rahman <br></br>
     /// Waits for three seconds before auhthenciating room version
     /// </summary>
-    public IEnumerator AwakeDelay()
+  /*  public IEnumerator AwakeDelay()
     {
         yield return new WaitForSeconds(3); // Waits
         //PhotonNetwork.AutomaticallySyncScene = true; // Sets options to always sync the scene to who is the Master client (Host)
         PhotonNetwork.GameVersion = "1.0.0";
-    }
+        Debug.Log(PhotonNetwork.GetPing());
+
+    }*/
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
@@ -113,14 +121,14 @@ public class Launcher : MonoBehaviourPunCallbacks
     /// @author Balraj Bains <br></br>
     /// returns room name
     /// </summary>
-    public string GetRoomName() { return roomName; }
-
+    public string GetRoomName() { return this.roomName; }
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
     /// sets the gamemode 
     /// </summary>
-    public void SetGameMode(int mode) {
+    public void SetGameMode(int mode)
+    {
         this.gameMode = mode;
     }
 
@@ -130,7 +138,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     /// <returns> returns the gamemode </returns>
     public int GetGameMode()
     {
-        return this.gameMode; 
+        return this.gameMode;
     }
 
 
@@ -138,6 +146,20 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         testing = state;
     }
+
+
+    public override void OnCreateRoomFailed(short code,string msg)
+    {
+        base.OnCreateRoomFailed(code, msg);
+    }
+    public override void OnJoinRoomFailed(short code, string msg)
+    {
+   
+        base.OnJoinRandomFailed(code, msg);
+
+    }
+    public override void OnErrorInfo(ErrorInfo errorInfo)
+    {
+        base.OnErrorInfo(errorInfo);
+    }
 }
-
-
