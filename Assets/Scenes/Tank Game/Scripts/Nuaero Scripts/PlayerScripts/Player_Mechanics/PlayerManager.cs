@@ -434,9 +434,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         SpawnPoints = playerSpawn;
     }
-    public Shooting getShootClass() {
+    public Shooting getShootClass()
+    {
         return shootClass;
-
+    }
 
     public GameObject GetFFACanvas()
     {
