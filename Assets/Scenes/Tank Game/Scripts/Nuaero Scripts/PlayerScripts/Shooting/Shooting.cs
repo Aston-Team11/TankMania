@@ -26,7 +26,8 @@ public class Shooting : MonoBehaviourPunCallbacks
     private AudioSource tank_shootingSound;            // the bullet shooting sound
     public ParticleSystem muzzleFlash;                 // a muzzleflash particle effect to be instantiated per shot 
 
-    
+    [SerializeField] private GameObject shotgunPic, minigunPic;         // 
+
 
 
 
@@ -220,13 +221,19 @@ public class Shooting : MonoBehaviourPunCallbacks
     public void SetShotgun()
     {
         ShotgunEnable = true;
-        MinigunEnable = false; 
+        displayShotgun(true);
+        MinigunEnable = false;
+        displayMinigun(false);
+
     }
 
     public void SetMinigun() 
     {
         MinigunEnable = true;
+        displayMinigun(true);
         ShotgunEnable = false;
+        displayShotgun(false);
+
     }
     /// <summary>
     /// @author Riyad K Rahman <br></br>
@@ -236,6 +243,16 @@ public class Shooting : MonoBehaviourPunCallbacks
     {
         shootAble = val;
 
+    }
+
+    public void displayShotgun(bool state)
+    {
+        shotgunPic.SetActive(state);
+    }
+
+    public void displayMinigun(bool state)
+    {
+        minigunPic.SetActive(state);
     }
 
     //timing of how long the powerups last
