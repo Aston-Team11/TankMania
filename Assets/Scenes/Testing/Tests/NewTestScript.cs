@@ -73,5 +73,20 @@ namespace Tests
             Assert.AreEqual(true, this.playerstats.GetFFACanvas().activeSelf);
            
         }
+
+        [UnityTest]
+        public IEnumerator PlayerMove_Enumerator()
+        {
+            // Use the Assert class to test conditions.
+            // Use yield to skip a frame.
+            Input.GetKey(KeyCode.LeftShift);
+            yield return new WaitForSeconds(1f);
+            //this.playerstats.GameModeSetup(1);
+            Debug.Log(this.player.GetComponent<PlayerMovement>().direction);
+            Assert.AreNotEqual((0, 0), this.player.GetComponent<PlayerMovement>().direction);
+
+        }
+
+
     }
 }
