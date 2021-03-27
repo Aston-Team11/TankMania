@@ -73,6 +73,7 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         displayShield(false);
         displaySlowMo(false);
 
+        powerUpType = powerType;
         if (powerUpType == "SHIELD")
         {
             displayShield(true);
@@ -80,6 +81,27 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         else if (powerUpType == "SLOMO")
         {
             displaySlowMo(true);
+        }
+        else if (powerUpType == "HealthUp")
+        {
+            //add 10 to the health 
+            this.GetComponent<PlayerManager>().AddHealth(10.0f);
+
+            //issue with not syncing with the health bar 
+        }
+        else if (powerUpType == "AdditionalLife")
+        {
+            //working fine 
+            this.GetComponent<PlayerManager>().AddLife();
+        }
+        else if (powerType == "Shotgun")
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Shooting>().SetShotgun();
+
+        }
+        else if (powerType == "Minigun")
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Shooting>().SetMinigun();
         }
     }
 

@@ -63,9 +63,11 @@ namespace SpeedTutorMainMenuSystem
         }
         #endregion
 
-    
-        public GameObject Launcher;
-        public TMP_InputField roomName;
+
+        [SerializeField] private GameObject Launcher;
+        private TMP_InputField roomName;
+        [SerializeField] private GameObject loadingComponent;
+
         public void Awake()
         {
             Launcher = GameObject.Find("Launcher"); // Finds launcher if it exists
@@ -77,11 +79,14 @@ namespace SpeedTutorMainMenuSystem
         public void PlayGame()
         {
              Launcher.GetComponent<Launcher>().OnClickCreate(); // Call on new game click in launcher
+             loadingComponent.SetActive(true);
+              
         }
         public void LoadGame()
         {
             roomName = GameObject.Find("InputField").GetComponent<TMP_InputField>();
             Launcher.GetComponent<Launcher>().OnClickJoin(roomName.text.ToUpper()); // Call on join button press in launcher
+            loadingComponent.SetActive(true);
         }
 
         // Main Section

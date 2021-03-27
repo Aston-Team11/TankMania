@@ -73,5 +73,6 @@ namespace Tests
             Assert.AreEqual(true, this.playerstats.GetFFACanvas().activeSelf);
            
         }
+
     }
 }

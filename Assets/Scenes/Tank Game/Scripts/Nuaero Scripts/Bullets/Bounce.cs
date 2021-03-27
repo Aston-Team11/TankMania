@@ -115,14 +115,22 @@ public class Bounce : MonoBehaviourPunCallbacks
         {
             PlayerManager playerhit = collision.transform.root.gameObject.GetComponent<PlayerManager>();
 
-            //only apply damage from enemy bullets 
-            if (playerhit.gameObject != playerOwner) {
+            if (playerhit.GetHealth() < 11) {
+
+                int killvalue = 0;
                 
-                //add a kill count to the owner of this bullet
-                if (playerhit.GetHealth() < 11)
+                //if a different player killed this player then they should get a kill
+                if (playerhit.gameObject != playerOwner)
                 {
-                    playerOwner.GetComponent<PlayerManager>().AddKill();
+                    killvalue++;
                 }
+                //if you kill yourself then you lose a kill
+                else
+                {
+                    killvalue--;
+                }
+
+                playerOwner.GetComponent<PlayerManager>().AddKill(killvalue);
             }
 
             playerhit.DamagePlayer(10);
@@ -239,6 +247,15 @@ public class Bounce : MonoBehaviourPunCallbacks
         return playerOwner;
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// assigns a number of reflections for this bullet 
+    /// </summary>
+    /// <param name="reflections">the number of bounces before the bullet dissolves</param>
+    public void SetReflections(int reflections)
+    {
+        reflectionCount = reflections;
+    }
 
 }
 

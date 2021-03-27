@@ -340,7 +340,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         else if (isPoisionCount > 0)
         {
             isPoisionCount--;
-            //StopCoroutine(endPoison());
         }
 
     }
@@ -365,9 +364,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     /// increments kill counter and updates UI
     /// when <see cref="maxkills"/> has been reached then the game will end 
     /// </summary>
-    public void AddKill()
+    /// <param name="val">the value the kills should be incremented by</param>
+    public void AddKill(int val)
     {
-        killCount++;
+        killCount += val;
 
         if (!photonView.IsMine) { return; }
 
@@ -378,6 +378,30 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             //endgame
             MySystem.GetComponent<Manager>().BeginEndGame();
         }
+    }
+
+    /// <summary>
+    ///  @author Lerai Foulkes <br></br>
+    ///  incrments health by its parameter, if it does not go past max health 
+    /// </summary>
+    /// <param name="inc">the value to increment the health by </param>
+    public void AddHealth(float inc)
+    {
+        //if increment wont go past max health then apply it
+        if (photonView.IsMine && !(health + inc > 100))
+        {
+            health += inc;
+            photonView.RPC("shareMyHealth", RpcTarget.AllBuffered, health);
+        }
+    }
+
+    /// <summary>
+    /// @author Lerai Foulkes <br></br>
+    /// 
+    /// </summary>
+    public void AddLife()
+    {
+        lives = lives + 1;
     }
 
 
