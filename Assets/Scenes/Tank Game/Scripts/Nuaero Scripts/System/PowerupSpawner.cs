@@ -16,10 +16,10 @@ public class PowerupSpawner : MonoBehaviourPunCallbacks
     private float myTotalTime = 0f;                         // total time in float
     private int seconds = 0;                                // total time in seconds
     private bool spawning = false;                          // bool state which controls when to spawn a powerupbox
-    private int spawnTime = 20;                             // the interval at which a new set of boxes will spawn
+    private int spawnTime = 10;                             // the interval at which a new set of boxes will spawn
 
     private int playerCount = 0;                            //the number of players in the room
-
+    public int gameMode { get; set; }
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
@@ -76,6 +76,7 @@ public class PowerupSpawner : MonoBehaviourPunCallbacks
     {
        var box = PhotonNetwork.Instantiate(powerBox.name, spawners[spawnerId].transform.position, transform.rotation);
        box.GetComponent<PowerUp>().SetMySpawner(this.gameObject);
+        box.GetComponent<PowerUp>().MaxRange = 7 - gameMode;
        BoxCount++; 
     }
 

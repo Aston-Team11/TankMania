@@ -14,7 +14,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
     private AudioSource explosion_soundEffect;                 // the explosion sound effect for the power up boxes
     private GameObject mySpawner;                              // the powerup spawner 
     private Vector3 descend = new Vector3(0f, -5f, 0f);        //the rate of descent to be applied when the powerup box spawns in
-
+    public int MaxRange { get; set; }
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
@@ -47,7 +47,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
     /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Rocket")
+        if (collision.gameObject.tag == "Bullet")
         {
             Debug.Log("givePowerUp");
             activatePowerUp(collision.gameObject.GetComponent<Bounce>().getplayer());
@@ -95,7 +95,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// @author Riyad K Rahman <br></br>
+    /// @author Riyad K Rahman, Lerai Foulkes <br></br>
     /// 'result' picks a random number 1 or 2. (at the moment this is only 2 powerups, but will be many more in a later date)
     /// A case statement then sends a message to the player <see cref="PlayerManager.PowerupAttained(string)"/> with a string of the type of powerup being sent 
     /// </summary>
@@ -107,7 +107,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
             return;
         }
 
-        double result = Random.Range(1, 3);
+        int result = Random.Range(1, MaxRange);
 
         switch (result)
         {
@@ -120,6 +120,27 @@ public class PowerUp : MonoBehaviourPunCallbacks
                 player.SendMessage("PowerupAttained", "SHIELD");
                 Debug.Log("SENT SHIELD");
                 break;
+
+            case 3:
+                player.SendMessage("PowerupAttained", "HealthUp");
+                Debug.Log("Health up by 10 ");
+                break;
+
+            case 4:
+                player.SendMessage("PowerupAttained", "Minigun");
+                Debug.Log("Minigun Attained");
+                break;
+
+            case 5:
+                player.SendMessage("PowerupAttained", "Shotgun");
+                Debug.Log("Shotgun Attained");
+                break;
+
+            case 6:
+                player.SendMessage("PowerupAttained", "AdditionalLife");
+                Debug.Log("Extra Life");
+                break;
+
 
             default:
                 print("ErROR No PoWEr uP FouNd");

@@ -323,7 +323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3514983296703000931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -382,5 +382,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 0}
-  loading: {fileID: 0}
-  errorscreen: {fileID: 0}

@@ -22,6 +22,7 @@ public class Manager : MonoBehaviourPunCallbacks
     [Header("Gamemode attributes")]
     [SerializeField] private int gameMode;                  // the currently active gamemode
     [SerializeField] private Gamemode gmclass;             // the gamemode class, which handles enabling and sending appropraite data to objects of the associated gamemode
+    [SerializeField] private PowerupSpawner PwrUpSpawnclass;             // the powerupspawner class, which handles spawning powerups and which powerups should be enabled 
     private Launcher launcher;                             // the shared gameobject across all clients. holds data about which gamemode was selected 
     #endregion
 
@@ -40,6 +41,8 @@ public class Manager : MonoBehaviourPunCallbacks
         {
             gmclass.StartPVE(gameMode);
         }
+
+        PwrUpSpawnclass.gameMode = gameMode;
         StartCoroutine(SpawnPlayer());
     }
 

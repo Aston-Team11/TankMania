@@ -16,7 +16,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     static private string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";   // characters to choose from to generate a room name
     [SerializeField] private int gameMode;                        // the gamemode selected 
     private bool testing = false;
-
+    private int Countrepeats = 0;
+    private bool JoinState = false;             //joinstate defines how we should connect to the server (false we create a room nad true is to join a room)
 
     private void Awake()
     {
@@ -31,7 +32,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     public void OnClickCreate() 
     {
         PhotonNetwork.ConnectUsingSettings();   // Connect to server (Settings: APP ID, Region, Server Address) calls OnConnectedToMaster()
-        StartCoroutine(roomCreate());           // Call roomCreate()
+        InvokeRepeating("CheckConnectionStatus", 3f, 1f);
+        JoinState = false;
     }
 
 
@@ -39,28 +41,51 @@ public class Launcher : MonoBehaviourPunCallbacks
      {
         PhotonNetwork.ConnectUsingSettings();
         this.roomName = roomName;
-        StartCoroutine(JoinRoom());
-         
-     }
+        InvokeRepeating("CheckConnectionStatus", 3f, 1f);
+        JoinState = true;
 
-    /// <summary>
-    /// @author Balraj Bains <br></br>
-    /// Waits for three second before calling CreateRoom()
-    /// </summary>
-    public IEnumerator roomCreate()
-    {
-        yield return new WaitForSeconds(3); 
-        CreateRoom();
     }
 
+
     /// <summary>
-    /// @author Balraj Bains <br></br>
-    /// Waits for three seconds before joining a room
+    /// @author Riyad K Rahman <br></br>
+    /// checks connection state and creates room when connected 
     /// </summary>
-    public IEnumerator JoinRoom()
+    private void CheckConnectionStatus()
     {
-        yield return new WaitForSeconds(3); //
-        PhotonNetwork.JoinRoom(roomName);
+        Countrepeats++;
+        
+        if(Countrepeats > 100)
+        {
+            PhotonNetwork.Disconnect();
+        }
+        else
+        {
+            bool state = false;
+
+            if (PhotonNetwork.IsConnected)
+            {
+                if (PhotonNetwork.IsConnectedAndReady)
+                {
+                    state = true;
+                }
+               
+            }
+
+            if (state) { 
+                if(JoinState == false)
+                {
+                    CreateRoom();       // tries to create a room
+                    CancelInvoke();
+                }
+               else
+                {
+                    PhotonNetwork.JoinRoom(roomName);
+                    CancelInvoke();
+                }
+            }           
+        }
+       
     }
 
     /// <summary>
@@ -76,7 +101,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
-    /// Loads Scene 3 
+    /// Loads this player into the game 
     /// </summary>
     public override void OnJoinedRoom()
     {
