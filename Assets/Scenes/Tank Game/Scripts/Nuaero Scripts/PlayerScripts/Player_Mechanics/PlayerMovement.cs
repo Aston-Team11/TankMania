@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private bool IsInputEnabled = true;                 // a boolean to check if any user input should be applied
 
     private float steeringOffset = 15;                         //an offset to be applied when rotating the player 
-    public Vector2 direction;                                 // the direction of hte player's inputs 
+    public Vector2 direction;                                 // the direction of the player's inputs 
   
     public GameObject parentCam;                            //the camera of the player
     [SerializeField] private AudioSource engine;           //the engine sound which adjusts when the player moves 
