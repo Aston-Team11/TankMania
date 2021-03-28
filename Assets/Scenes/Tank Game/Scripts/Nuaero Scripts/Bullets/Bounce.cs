@@ -114,8 +114,9 @@ public class Bounce : MonoBehaviourPunCallbacks
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "PlayerAddOns")
         {
             PlayerManager playerhit = collision.transform.root.gameObject.GetComponent<PlayerManager>();
+            float playerhitHealth = playerhit.GetHealth();
 
-            if (playerhit.GetHealth() < 11) {
+            if (playerhitHealth < 11 && playerhitHealth > -10) {
 
                 int killvalue = 0;
                 
@@ -130,7 +131,7 @@ public class Bounce : MonoBehaviourPunCallbacks
                     killvalue--;
                 }
 
-                playerOwner.GetComponent<PlayerManager>().AddKill(killvalue);
+                playerOwner.GetComponent<PlayerManager>().AddKill(killvalue,playerhit.photonView.ViewID);
             }
 
             playerhit.DamagePlayer(10);

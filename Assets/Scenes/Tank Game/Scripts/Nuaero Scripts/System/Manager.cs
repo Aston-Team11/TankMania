@@ -121,8 +121,8 @@ public class Manager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void EndGame()
     {
-        PhotonNetwork.Disconnect();
         SceneManager.LoadScene("Endgame", LoadSceneMode.Single);
+       // PhotonNetwork.Disconnect();
     }
 
 

@@ -36,7 +36,8 @@ public class Loading : MonoBehaviourPunCallbacks
         if (Countrepeats > 9)
         {
             PhotonNetwork.Disconnect();
-            this.gameObject.SetActive(false);
+            transform.parent.gameObject.SetActive(false);
+            CancelInvoke();
         }
 
     }

@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [SerializeField] private AudioSource engine;           //the engine sound which adjusts when the player moves 
     [SerializeField] private float audioOffset;            //the offset at which the pitch of the engine sound should be adjusted (mimics reving sound)
 
+
     /// <summary>
     ///  @author Riyad K Rahman <br></br>
     ///  initialses default values and sets the player's camera to look at this player 
@@ -62,11 +63,13 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     /// </summary>
     private void Update()
     {
-        // check if player view is this player
-        if (!photonView.IsMine) return;
-        if(!IsInputEnabled) return;
-        direction.x = Input.GetAxisRaw("Vertical");
-        direction.y = Input.GetAxisRaw("Horizontal") * steeringOffset;
+            // check if player view is this player
+            if (!photonView.IsMine) return;
+            if (!IsInputEnabled) return;
+
+            direction.y = Input.GetAxisRaw("Vertical");
+            direction.x = Input.GetAxisRaw("Horizontal") * steeringOffset;
+      
       
     }
 
@@ -80,7 +83,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (!photonView.IsMine) return;
 
         // apply forward/backward force dependent on user input 
-        rb.AddForce(transform.forward * direction.x * acceleration);
+        rb.AddForce(transform.forward * direction.y * acceleration);
 
         // engine revving sound 
         float result = Mathf.Lerp(0f, rb.velocity.magnitude * 1.09f , 0.1f);
@@ -88,7 +91,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
 
         //rotation
-        rb.AddTorque(transform.up * torqueForce * direction.y);
+        rb.AddTorque(transform.up * torqueForce * direction.x);
 
         //check if time has been changed, adjust acceleration if time is slowed
         acceleration = (Time.timeScale != 1) ? defaultSpeed * 2f : defaultSpeed;

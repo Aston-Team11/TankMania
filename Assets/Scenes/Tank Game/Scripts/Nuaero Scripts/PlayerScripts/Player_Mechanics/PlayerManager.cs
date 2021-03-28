@@ -9,12 +9,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 {   
     [SerializeField] private int order;                             //used to sort players in lists (for zombie spawner targeting)
     private int gameMode;                                          //the current gamemode selceted affects which UI elements are displayed 
-    [SerializeField] private int killCount;                        //number of kills of other players 
-    private int maxkills = 10;                                     //number of kills needed to end the game 
-    [SerializeField] private GameObject MySystem;                   //handles ending the game
+    [SerializeField] private GameObject MySystem;                  //handles ending the game
+    private InGameMenus SharedStats;                        
     [SerializeField] private GameObject pve, ffa;                   //two different UI setups
     [SerializeField] private Text ffaKills;                         //killCount in UI
     private GameObject SpawnPoints;                                 //holds different spawn points a player can spawn from 
+
     #region Health
     [Header("Health Management")]
     [SerializeField] private float health;                          //health of player
@@ -41,18 +41,25 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject livesText;
     #endregion
 
-   
+    #region Kills tracking
+    [Header("KillCounts")]
+    [SerializeField] private int killCount;                        //number of kills of other players 
+    private int maxkills = 10;                                     //number of kills needed to end the game 
+    private int previousID, KillCoroutinecount;
+    #endregion
 
-   public void Start()
+
+
+    public void Start()
     {
         SetName();
-        SetOrder(photonView.ViewID);
+        SetOrder(PhotonNetwork.LocalPlayer.ActorNumber);
 
         if (photonView.IsMine)
         {
             setMouse();
            MySystem = GameObject.Find("----SYSTEMS----");
-           
+            SharedStats = GameObject.FindGameObjectWithTag("SharedStats").GetComponent<InGameMenus>();
             ActivateHealth();
         }
 
@@ -359,26 +366,56 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
+
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// this method is used to validate the kill before adding it to this player.
+    /// the kill is checked for possible double kill
+    /// </summary>
+    /// <param name="val"></param>
+    /// <param name="playerID">the reference to the player killed </param>
+    public void AddKill(int val, int playerID)
+    {
+        if (!photonView.IsMine) { return; }
+
+        if(KillCoroutinecount < 5 && previousID != playerID)
+        {
+            StartCoroutine(SyncKills(val));
+            KillCoroutinecount++;
+        }
+
+        previousID = playerID;
+
+    }
+
+
+
     /// <summary>
     /// @author Riyad K Rahman <br></br>
     /// increments kill counter and updates UI
     /// when <see cref="maxkills"/> has been reached then the game will end 
     /// </summary>
     /// <param name="val">the value the kills should be incremented by</param>
-    public void AddKill(int val)
+    /// <returns>waits half a second before executing </returns>
+    private IEnumerator SyncKills(int val)
     {
+        yield return new WaitForSeconds(0.5f);
+        
         killCount += val;
-
-        if (!photonView.IsMine) { return; }
-
+        SharedStats.AddKills(order - 1, killCount);
         ffaKills.text = killCount.ToString();
 
-        if (killCount > maxkills)
+        if (killCount >= maxkills)
         {
             //endgame
             MySystem.GetComponent<Manager>().BeginEndGame();
         }
+
+        //reset the values for the if conditions
+        KillCoroutinecount = 0;
+        previousID = 0;
     }
+
 
     /// <summary>
     ///  @author Lerai Foulkes <br></br>

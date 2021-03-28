@@ -11,10 +11,10 @@ namespace Tests
     /// @author Riyad K Rahman <br></br>
     /// preforms a series of unit tests on the playerManager class
     /// </summary>
-    public class TestScriptPlayerManager
+    public class TestSuitePlayer
     {
-        GameObject player;                      //the new player instantiated 
-        PlayerManager playerstats;              //the player manager component of the new player 
+        GameObject player;                              //the new player instantiated 
+        PlayerManager playerManagerstats;              //the player manager component of the new player 
 
         /// <summary>
         /// @author Riyad K Rahman <br></br>
@@ -48,7 +48,7 @@ namespace Tests
             Vector3 pos = new Vector3(-8.44f, 0.5f, 3.4f);
             Quaternion rot = new Quaternion(0f, 0f, 0f, 0f);
             this.player = PhotonNetwork.Instantiate("Player_1", pos, rot);  //assigns the player to a new player gameobject 
-            this.playerstats = this.player.GetComponent<PlayerManager>();   //assigns the player manager component of the new player 
+            this.playerManagerstats = this.player.GetComponent<PlayerManager>();   //assigns the player manager component of the new player 
             Assert.IsNotNull(this.player);
         }
 
@@ -58,9 +58,8 @@ namespace Tests
             // Use the Assert class to test conditions.
             // Use yield to skip a frame.
             yield return null;
-            this.playerstats.DamagePlayer(10);
-            Assert.AreEqual(90, this.playerstats.GetHealth());
-            
+            this.playerManagerstats.DamagePlayer(10);
+            Assert.AreEqual(90, this.playerManagerstats.GetHealth());
         }
 
         [UnityTest]
@@ -69,22 +68,40 @@ namespace Tests
             // Use the Assert class to test conditions.
             // Use yield to skip a frame.
             yield return null;
-            this.playerstats.GameModeSetup(1);
-            Assert.AreEqual(true, this.playerstats.GetFFACanvas().activeSelf);
+            this.playerManagerstats.GameModeSetup(1);
+            Assert.AreEqual(true, this.playerManagerstats.GetFFACanvas().activeSelf);
            
         }
 
+        /// <summary>
+        /// tests if the player has changed rotations
+        /// </summary>
+        /// <returns></returns>
         [UnityTest]
         public IEnumerator PlayerMove_Enumerator()
         {
             // Use the Assert class to test conditions.
             // Use yield to skip a frame.
-            Input.GetKey(KeyCode.LeftShift);
-            yield return new WaitForSeconds(1f);
-            //this.playerstats.GameModeSetup(1);
-            Debug.Log(this.player.GetComponent<PlayerMovement>().direction);
-            Assert.AreNotEqual((0, 0), this.player.GetComponent<PlayerMovement>().direction);
+            yield return null;
 
+            float initialrot = this.player.transform.rotation.y;        //the starting rotation
+    
+            //simulate player input 
+            this.player.GetComponent<PlayerMovement>().direction.x = -15;
+            yield return new WaitForEndOfFrame();
+            this.player.GetComponent<PlayerMovement>().direction.x = -15;
+
+
+            yield return new WaitForSeconds(1f);
+
+            if (this.player.transform.rotation.y < initialrot)
+            {
+                Assert.IsTrue(true);
+            }
+            else
+            {
+                Assert.IsTrue(false);
+            }
         }
 
 

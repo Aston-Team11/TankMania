@@ -14,7 +14,6 @@ public class Spawner : MonoBehaviourPunCallbacks
     [SerializeField] private int enemySpawnAmount = 0;          //number of enemies which should be spawned 
     [SerializeField] private int enemiesKilled = 0;             //number of enemies killed  
 
-
     public GameObject[] spawners;                               //spawnpoints of the zombies
     public GameObject enemy;                                    //the zombie gameobject
     public GameObject target;                                   //the target player for the zombies 
