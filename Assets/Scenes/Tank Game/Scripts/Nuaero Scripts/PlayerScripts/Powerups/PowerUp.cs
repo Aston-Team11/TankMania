@@ -86,10 +86,17 @@ public class PowerUp : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnDisable()
     {
-        if (photonView.IsMine)
+        try
         {
-            mySpawner.GetComponent<PowerupSpawner>().decrementBoxCount();
-            PhotonNetwork.Destroy(this.photonView);
+            if (photonView.IsMine)
+            {
+                mySpawner.GetComponent<PowerupSpawner>().decrementBoxCount();
+                PhotonNetwork.Destroy(this.photonView);
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            Debug.Log("the game has ended");
         }
 
     }
@@ -107,7 +114,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
             return;
         }
 
-        int result = Random.Range(1, MaxRange);
+        int result = Random.Range(1, MaxRange);   
 
         switch (result)
         {

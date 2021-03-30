@@ -14,14 +14,15 @@ public class Spawner : MonoBehaviourPunCallbacks
     [SerializeField] private int enemySpawnAmount = 0;          //number of enemies which should be spawned 
     [SerializeField] private int enemiesKilled = 0;             //number of enemies killed  
 
-
     public GameObject[] spawners;                               //spawnpoints of the zombies
     public GameObject enemy;                                    //the zombie gameobject
     public GameObject target;                                   //the target player for the zombies 
     public int Spawncount = 4;                                  // the number of zombies currently spawned 
     private int maxwaveNumber = 10;                             //the max wave count until the game ends 
+    private int numberOfPlayersOffset = 0;                                     //changes the spawn amount depending on how many players there are 
 
     [SerializeField] private List<GameObject> PlayerLists = new List<GameObject>();  // a list of players 
+    [SerializeField] private HashSet<GameObject> nextWavePlayerLists = new HashSet<GameObject>(); // a new list of players 
 
     /// <summary>
     /// @author Riyad K Rahman, Anil Virk <br></br>
@@ -67,11 +68,24 @@ public class Spawner : MonoBehaviourPunCallbacks
     {
         if (!(photonView.IsMine)) return;
 
-        if(enemiesKilled >= enemySpawnAmount)
+        if (enemiesKilled >= enemySpawnAmount)
         {
-            NextWave();
-        }
+            numberOfPlayersOffset = PhotonNetwork.CurrentRoom.PlayerCount;
+            
+            //reset the player lists after each wave
+            for(int i = 0; i<PlayerLists.Count; i++)
+            {
+                if (PlayerLists[i] == null)
+                {
+                    PlayerLists.RemoveAt(i);
+                   // nextWavePlayerLists.Add(PlayerLists[i]);
+                }
 
+            }
+            
+            NextWave();
+
+        }
     }
 
 
@@ -98,14 +112,14 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     /// <summary>
     /// @author Riyad K Rahman, Anil Virk <br></br>
-    /// spawns in next wave of zombies 
+    /// spawns in next wave of zombies, an extra zombie is spawned for every player 
     /// </summary>
     private void NextWave()
     {
         waveNumber++;
         if(waveNumber < maxwaveNumber)
         {
-            enemySpawnAmount += 5;
+            enemySpawnAmount += (5 + numberOfPlayersOffset);
             enemiesKilled = 0;
             photonView.RPC("SyncWave", RpcTarget.OthersBuffered, waveNumber);
 
@@ -120,6 +134,7 @@ public class Spawner : MonoBehaviourPunCallbacks
             photonView.RPC("Endgame", RpcTarget.All);
         }
        
+
     }
     /// <summary>
     /// @author Riyad K Rahman <br></br>
@@ -178,7 +193,6 @@ public class Spawner : MonoBehaviourPunCallbacks
     {
         PlayerLists.Remove(player);
     }
-
 
 
     /// <summary>

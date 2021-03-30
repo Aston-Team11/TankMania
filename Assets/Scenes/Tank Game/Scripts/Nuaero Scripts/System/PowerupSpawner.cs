@@ -61,7 +61,6 @@ public class PowerupSpawner : MonoBehaviourPunCallbacks
             //re-enable powerup spawning after 1 second 
             if (seconds != 0 && (seconds % (spawnTime + 1) == 0))
             {
-               
                 spawning = false;
             }
         }
@@ -76,7 +75,7 @@ public class PowerupSpawner : MonoBehaviourPunCallbacks
     {
        var box = PhotonNetwork.Instantiate(powerBox.name, spawners[spawnerId].transform.position, transform.rotation);
        box.GetComponent<PowerUp>().SetMySpawner(this.gameObject);
-        box.GetComponent<PowerUp>().MaxRange = 7 - gameMode;
+       box.GetComponent<PowerUp>().MaxRange = 7 - (gameMode * 2);   //if on ffa gamemode the add life and shotgun powerup are removed
        BoxCount++; 
     }
 

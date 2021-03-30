@@ -378,7 +378,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 986578559914240776}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: 0}
+  m_LocalPosition: {x: 1.5, y: 0, z: -0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7138987362377790118}
@@ -647,7 +647,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1467680503351266032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalPosition: {x: -1.5, y: 0, z: -0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7138987362377790118}
@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de8c3c3a0db371f4ab85e805bad11b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theBullet: {fileID: 874580584143975371, guid: 5f038262061face4883cdfb6c087d44d,
+  theBullet: {fileID: 874580584143975371, guid: a85cf578f45aae7428f465353cf03a47,
     type: 3}
   top: {fileID: 5117564237719656440}
   bulletSpeed: 15
@@ -1534,7 +1534,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   order: 0
-  killCount: 0
   MySystem: {fileID: 0}
   pve: {fileID: 8008453263285291518}
   ffa: {fileID: 1168250623453533449}
@@ -1552,6 +1551,7 @@ MonoBehaviour:
   lives: 10
   Balloon: {fileID: 1104239772199263417}
   livesText: {fileID: 8555152359460278349}
+  killCount: 0
 --- !u!114 &5887224462932234372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1630,9 +1630,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: a1f4c76d2959e49469a40296466e1e47, type: 3}
+  m_audioClip: {fileID: 8300000, guid: fd3e2d62130ec90499e1d78cf3fb55ac, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.125
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 1
   Mute: 0
