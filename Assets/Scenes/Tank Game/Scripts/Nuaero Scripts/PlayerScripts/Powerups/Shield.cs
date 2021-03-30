@@ -68,7 +68,7 @@ public class Shield : MonoBehaviourPunCallbacks
         //changes fernal and offset, to look like shield is charging up and becoming more solid 
         if (bright > -2.00f && change == false)
         {
-            bright -= 0.8f * Time.fixedDeltaTime;
+            bright -= 0.8f * Time.unscaledDeltaTime;
             mats[0].SetFloat("Vector1_EBFAC9DB", bright);
             mats[0].SetFloat("Vector1_CD965979", bright + 2.05f);
             //!!!! change 2.05 value if you want alter brightness to change before material changes 
@@ -125,7 +125,7 @@ public class Shield : MonoBehaviourPunCallbacks
          var fernal = mats[1].GetFloat("Vector1_7AFF87E4");
         if (fernal < 2.37f && triggerDissolve == false)
         {
-            fernal += 0.4f * Time.fixedDeltaTime;
+            fernal += 1.0f * Time.unscaledDeltaTime;
             mats[1].SetFloat("Vector1_7AFF87E4", fernal);
         }
 
@@ -138,7 +138,7 @@ public class Shield : MonoBehaviourPunCallbacks
         var dissolve = mats[1].GetFloat("Vector1_2E8A09FF");
         if (dissolve > -0.9f && triggerDestroy == false)
         {
-            dissolve -= 0.6f * Time.fixedDeltaTime;
+            dissolve -= 1.2f * Time.unscaledDeltaTime;
             mats[1].SetFloat("Vector1_2E8A09FF", dissolve);
         }
 

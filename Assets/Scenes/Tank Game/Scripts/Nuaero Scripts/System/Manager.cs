@@ -64,17 +64,18 @@ public class Manager : MonoBehaviourPunCallbacks
         if (!(photonView.IsMine))
         {
             //sets different colour presets for each tank
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && PhotonNetwork.LocalPlayer.ActorNumber == 2)
+            if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
             {
                 newplayer = PhotonNetwork.Instantiate("Player_2", playerSpawns[gameMode].transform.GetChild(1).transform.position, playerSpawns[gameMode].transform.GetChild(1).transform.rotation);
             }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 3 && PhotonNetwork.LocalPlayer.ActorNumber == 3)
+
+            else if ( PhotonNetwork.LocalPlayer.ActorNumber == 3)
             {
-                newplayer = PhotonNetwork.Instantiate("Player_3", playerSpawns[gameMode].transform.GetChild(2).transform.position, playerSpawns[gameMode].transform.GetChild(2).transform.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_3", playerSpawns[gameMode].transform.GetChild(2).transform.position, playerSpawns[gameMode].transform.GetChild(2).transform.rotation);           
             }
-            else if (PhotonNetwork.CurrentRoom.PlayerCount == 4 && PhotonNetwork.LocalPlayer.ActorNumber == 4)
+            else if (PhotonNetwork.LocalPlayer.ActorNumber == 4)
             {
-                newplayer = PhotonNetwork.Instantiate("Player_4", playerSpawns[gameMode].transform.GetChild(3).transform.position, playerSpawns[gameMode].transform.GetChild(3).transform.rotation);
+                newplayer = PhotonNetwork.Instantiate("Player_4", playerSpawns[gameMode].transform.GetChild(3).transform.position, playerSpawns[gameMode].transform.GetChild(3).transform.rotation);              
             }
         }
 

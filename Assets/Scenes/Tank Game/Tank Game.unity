@@ -40914,7 +40914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slowFactor: 0.05
-  slowLength: 2
+  slowLength: 5
 --- !u!114 &8814312096076255879
 MonoBehaviour:
   m_ObjectHideFlags: 0

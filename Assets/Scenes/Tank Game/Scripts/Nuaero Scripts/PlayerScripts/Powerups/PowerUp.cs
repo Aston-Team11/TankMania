@@ -14,7 +14,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
     private AudioSource explosion_soundEffect;                 // the explosion sound effect for the power up boxes
     private GameObject mySpawner;                              // the powerup spawner 
     private Vector3 descend = new Vector3(0f, -5f, 0f);        //the rate of descent to be applied when the powerup box spawns in
-    public int MaxRange { get; set; }
+    private int MaxRange;
 
     /// <summary>
     /// @author Riyad K Rahman <br></br>
@@ -129,7 +129,8 @@ public class PowerUp : MonoBehaviourPunCallbacks
                 break;
 
             case 3:
-                player.SendMessage("PowerupAttained", "HealthUp");
+                // player.SendMessage("PowerupAttained", "HealthUp");
+                player.SendMessage("PowerupAttained", "Minigun");
                 Debug.Log("Health up by 10 ");
                 break;
 
@@ -160,6 +161,17 @@ public class PowerUp : MonoBehaviourPunCallbacks
     public void SetMySpawner(GameObject spawner)
     {
         mySpawner = spawner;
+    }
+
+    public void SetMaxRange(int range)
+    {
+        photonView.RpcSecure("SyncRange", RpcTarget.All, true, range);
+    }
+
+    [PunRPC]
+    private void SyncRange(int range)
+    {
+        MaxRange = range;
     }
 
 }

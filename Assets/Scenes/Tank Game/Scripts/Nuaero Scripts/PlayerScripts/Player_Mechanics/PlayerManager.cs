@@ -203,8 +203,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         lives--;
         
-        //update life across all cleints only if this player is owned by this machine 
-        if (photonView.IsMine)
+        //update life across all clients only if this player is owned by this machine 
+        if (photonView.IsMine && gameMode == 0)
         {
             SharedStats.DeductLives(order - 1, lives);
         }
@@ -383,7 +383,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     /// <param name="playerID">the reference to the player killed </param>
     public void AddKill(int val, int playerID)
     {
-        if (!photonView.IsMine) { return; }
+        if (!photonView.IsMine || gameMode == 0) { return; }
 
         if(KillCoroutinecount < 5 && previousID != playerID)
         {
