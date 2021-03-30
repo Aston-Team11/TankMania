@@ -27,7 +27,6 @@ public class Shield : MonoBehaviourPunCallbacks
         //!!!! if collisions with shield and player persist then delete above line
     }
 
-
     private void Update()
     {
         StartCoroutine(Dissolve());
@@ -53,7 +52,7 @@ public class Shield : MonoBehaviourPunCallbacks
         }
     }
 
-        IEnumerator Dissolve()
+    IEnumerator Dissolve()
     {
         yield return new WaitForSeconds(15f);
         FXAnimation();
@@ -122,9 +121,8 @@ public class Shield : MonoBehaviourPunCallbacks
     [PunRPC]
     private void slowlyDestroy()
     {
-       
-        // changing brightness
-        var fernal = mats[1].GetFloat("Vector1_7AFF87E4");
+         // changing brightness
+         var fernal = mats[1].GetFloat("Vector1_7AFF87E4");
         if (fernal < 2.37f && triggerDissolve == false)
         {
             fernal += 0.4f * Time.fixedDeltaTime;
@@ -161,15 +159,15 @@ public class Shield : MonoBehaviourPunCallbacks
     [PunRPC]
     public void sendtoServer()
     {
-            gameObject.SetActive(false);
+        gameObject.SetActive(false);
         photonView.RPC("sendtoServer", RpcTarget.OthersBuffered);
     }
-
 
     public int getID()
     {
         return player.GetComponent<PhotonView>().ViewID;
     }
+
 
 }
 

@@ -163,7 +163,8 @@ public class Bounce : MonoBehaviourPunCallbacks
 
         //++++bullet dissolves on contact with shield
         else if (collision.gameObject.tag == "Shield")
-        {           
+        {
+            GameObject.Find("BulletAudio").GetComponent<AudioSource>().Play();
             dissolveRate = 0.5f;
             beginDissolve = true;
         }
@@ -213,6 +214,7 @@ public class Bounce : MonoBehaviourPunCallbacks
     {
         var Exploded = Instantiate(explosion, transform.position, transform.rotation);
         Destroy(Exploded, 2f);
+       GameObject.FindGameObjectWithTag("PowerUpExplosion").GetComponent<AudioSource>().Play();
         this.gameObject.SetActive(false);
 
     }
