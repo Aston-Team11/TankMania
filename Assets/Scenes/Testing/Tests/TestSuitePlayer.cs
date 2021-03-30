@@ -70,7 +70,7 @@ namespace Tests
             yield return null;
             this.playerManagerstats.GameModeSetup(1);
             Assert.AreEqual(true, this.playerManagerstats.GetFFACanvas().activeSelf);
-           
+
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Tests
             yield return null;
 
             float initialrot = this.player.transform.rotation.y;        //the starting rotation
-    
+
             //simulate player input 
             this.player.GetComponent<PlayerMovement>().direction.x = -15;
             yield return new WaitForEndOfFrame();
@@ -104,6 +104,15 @@ namespace Tests
             }
         }
 
-
+      // [Category ("dc")]
+      // [UnityTest]
+      // public IEnumerator Disconnect()
+      // {
+      //     PhotonNetwork.Disconnect();
+      //     yield return new WaitForSeconds(5f);
+      //
+      //     Assert.IsTrue(PhotonNetwork.IsConnected);
+      //
+      // }
     }
 }

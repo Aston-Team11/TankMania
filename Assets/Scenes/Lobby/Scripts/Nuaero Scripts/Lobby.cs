@@ -84,11 +84,22 @@ public class Lobby : MonoBehaviourPunCallbacks
             if (photonView.IsMine)
             {
                 mySession.GetComponent<GameSession>().setGameSession();
+                photonView.RpcSecure("LoadLevelSync", RpcTarget.All,true);
             }
-           PhotonNetwork.LoadLevel(4);
+         
         }
 
     }
+
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  syncs the level loading for all clients
+    /// </summary>
+    [PunRPC]
+    private void LoadLevelSync()
+    {
+        PhotonNetwork.LoadLevel(4);
+    } 
 
 
     /// <summary>

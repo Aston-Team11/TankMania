@@ -12,11 +12,11 @@ public class Loading : MonoBehaviourPunCallbacks
     private RectTransform rectComponent;                //a rectangle to rotate around the circle
     private float rotateSpeed = 200f;                   //the rotation speed of the laoding circle
     private int  Countrepeats = 0;                          //the number of repeats for the invokeRepeating function
+    [SerializeField] private GameObject connectionfail;  //text to inform user the connection has failed 
 
     private void Start()
     {
         rectComponent = GetComponent<RectTransform>();
-        InvokeRepeating("CheckConnectionStatus", 5f, 1f);
     }
 
     private void Update()
@@ -33,7 +33,7 @@ public class Loading : MonoBehaviourPunCallbacks
         Countrepeats++;
 
         //if it has taken more than 54 seconds to connect then disconnect and show error message
-        if (Countrepeats > 9)
+        if (Countrepeats > 2)
         {
             PhotonNetwork.Disconnect();
             transform.parent.gameObject.SetActive(false);
@@ -42,5 +42,25 @@ public class Loading : MonoBehaviourPunCallbacks
 
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// shows error text when this object is disabled 
+    /// </summary>
+    public override void OnDisable()
+    {
+        connectionfail.SetActive(true);
+        CancelInvoke();
+    }
+
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// begins a countdown to disconnect
+    /// </summary>
+    public override void OnEnable()
+    {
+        connectionfail.SetActive(false);
+        Countrepeats = 0;
+        InvokeRepeating("CheckConnectionStatus", 5f, 1f);
+    }
 
 }

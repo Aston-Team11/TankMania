@@ -9,12 +9,21 @@ public class InGameMenus : MonoBehaviourPunCallbacks
     private static bool GameIsPaused = false;
     private int gameMode;
     [SerializeField] private GameObject pauseMenuUI, leaderboardUI;
-    public int[] playerKills; 
+    public int[] sharedPlayerstats; 
 
     private void Start()
     {
         var launcher = GameObject.Find("Launcher").GetComponent<Launcher>();
         gameMode = launcher.GetGameMode();
+        
+        //set default value for the player lives stats in the pve gamemode 
+        if (gameMode == 0)
+        {
+            sharedPlayerstats[0] = 10;
+            sharedPlayerstats[1] = 10;
+            sharedPlayerstats[2] = 10;
+            sharedPlayerstats[3] = 10;
+        }
     }
 
     // Update is called once per frame
@@ -37,7 +46,14 @@ public class InGameMenus : MonoBehaviourPunCallbacks
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             leaderboardUI.SetActive(true);
-            leaderboardUI.transform.GetChild(gameMode).gameObject.SetActive(true);
+            GameObject GamemodeCanvas = leaderboardUI.transform.GetChild(gameMode).gameObject;
+            GamemodeCanvas.SetActive(true);
+
+            //only display player stats for the number of players in the game 
+            for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+            {
+                GamemodeCanvas.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
+            }
         }
         else if (Input.GetKeyUp(KeyCode.Tab))
         {
@@ -73,11 +89,6 @@ public class InGameMenus : MonoBehaviourPunCallbacks
         Application.Quit();
     }
 
-    public int GetPlayerKills(int playerID)
-    {
-        return playerKills[playerID];
-    }
-
     public void AddKills(int playerID , int killcount)
     {
         photonView.RPC("SyncKillCount", RpcTarget.AllBuffered, playerID, killcount);
@@ -86,7 +97,23 @@ public class InGameMenus : MonoBehaviourPunCallbacks
     [PunRPC]
     private void SyncKillCount(int playerID, int killcount)
     {
-        playerKills[playerID] = killcount;
+        sharedPlayerstats[playerID] = killcount;
     }
 
+
+    public void DeductLives(int playerID, int lives)
+    {
+        photonView.RPC("SyncLives", RpcTarget.AllBuffered, playerID, lives);
+    }
+
+    [PunRPC]
+    private void SyncLives(int playerID, int lives)
+    {
+        sharedPlayerstats[playerID] = lives;
+    }
+
+    public int GetPlayerStats(int playerID)
+    {
+        return sharedPlayerstats[playerID];
+    }
 }

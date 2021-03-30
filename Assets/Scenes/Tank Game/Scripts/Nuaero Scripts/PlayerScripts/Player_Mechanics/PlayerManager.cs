@@ -196,14 +196,21 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     /// <summary>
     ///  @author Riyad K Rahman <br></br>
-    /// disable this player for all players in the room
+    /// disable this player for all players in the room and update life count across all clients 
     /// </summary>
     [PunRPC]
     public void RespawnMe()
     {
         lives--;
- 
-        if(lives > 0)
+        
+        //update life across all cleints only if this player is owned by this machine 
+        if (photonView.IsMine)
+        {
+            SharedStats.DeductLives(order - 1, lives);
+        }
+        
+
+        if (lives > 0)
         {
             //instantiate explosion effect 
             var Exploded = Instantiate(explosion, transform.position, transform.rotation);

@@ -143,7 +143,7 @@ public class Bounce : MonoBehaviourPunCallbacks
         else if (collision.gameObject.tag == "Bullet")
         {
          
-            GameObject.Find("TimeManager").GetComponent<AudioSource>().Play();
+            GameObject.Find("BulletAudio").GetComponent<AudioSource>().Play();
             dissolveRate = 0.5f;
             beginDissolve = true;
         }
@@ -208,9 +208,7 @@ public class Bounce : MonoBehaviourPunCallbacks
     /// <summary>
     /// @author Riyad K Rahman <br></br>
     /// This gameObject is exploded and then disabled on all clients
-    /// <seealso cref="PunRPC"/>
     /// </summary>
-    [PunRPC]
     public void Explode()
     {
         var Exploded = Instantiate(explosion, transform.position, transform.rotation);

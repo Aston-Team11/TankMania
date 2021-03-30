@@ -34,7 +34,7 @@ using Photon.Pun;
         /// </summary>
         public void TargetPlayer1()
         {
-            photonView.RPC("Retarget", RpcTarget.AllViaServer, "1003");
+            photonView.RPC("Retarget", RpcTarget.AllViaServer, "1004");
         }
 
 
@@ -80,11 +80,12 @@ using Photon.Pun;
             }
         }
 
-        /// <summary>
-        /// sets the target of a zombie
-        /// </summary>
-        /// <param name="name">name of the player</param>
-        [PunRPC]
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    /// tries to set the target of a zombie
+    /// </summary>
+    /// <param name="name">name of the player</param>
+    [PunRPC]
         public void Retarget(string name)
         {
             try
@@ -95,7 +96,7 @@ using Photon.Pun;
             {
                 //stay stationary
                 target = this.transform;
-                minimumDist = 7;
+                minimumDist = 20;
             }
         }
 
@@ -148,26 +149,27 @@ using Photon.Pun;
         /// @author Riyad K Rahman <br></br>
         /// Defines how this gameobject reacts on collision with other objects in the scene
         /// </summary>
-        /// <param name="collision"> This is used to detect shich object this zombie has collided with</param>
-        private void OnCollisionEnter(Collision collision)
+        /// <param name="collider"> This is used to detect shich object this zombie has collided with</param>
+        private void OnCollisionEnter(Collision collider)
         {
-            if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "PlayerAddOns")
+            if (collider.gameObject.tag == "Player" || collider.gameObject.tag == "PlayerAddOns")
             {
                 //!!!! add attacking animation here?
-                collision.gameObject.GetComponentInParent<PlayerManager>().DamagePlayer(10);
+                collider.gameObject.GetComponentInParent<PlayerManager>().DamagePlayer(10);
                 //Explode();
                 photonView.RPC("Explode", RpcTarget.AllBuffered);
                 //Debug.Log("attack");
             }
 
-            else if (collision.gameObject.tag == "Bullet")
+            else if (collider.gameObject.tag == "Bullet")
             {
                 Debug.Log("enemy dead");
                 // Death();
                 photonView.RPC("Death", RpcTarget.AllBuffered);
+                
             }
 
-            else if (collision.gameObject.tag == "Shield")
+            else if (collider.gameObject.tag == "Shield")
             {
                 Debug.Log("enemy Vapourised");
                 //Death();
