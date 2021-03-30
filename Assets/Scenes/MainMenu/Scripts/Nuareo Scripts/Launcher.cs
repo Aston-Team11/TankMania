@@ -21,7 +21,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        StartCoroutine(AwakeDelay());
+        PhotonNetwork.ConnectUsingSettings(); // Connect to server(Settings: APP ID, Region, Server Address) calls OnConnectedToMaster()
+        PhotonNetwork.GameVersion = "1.0.0";
     }
 
     private void Start()
@@ -31,7 +32,6 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void OnClickCreate() 
     {
-        PhotonNetwork.ConnectUsingSettings();   // Connect to server (Settings: APP ID, Region, Server Address) calls OnConnectedToMaster()
         InvokeRepeating("CheckConnectionStatus", 3f, 1f);
         JoinState = false;
     }
@@ -39,7 +39,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
      public void OnClickJoin(string roomName)
      {
-        PhotonNetwork.ConnectUsingSettings();
+        
         this.roomName = roomName;
         InvokeRepeating("CheckConnectionStatus", 3f, 1f);
         JoinState = true;
@@ -162,6 +162,23 @@ public class Launcher : MonoBehaviourPunCallbacks
     public void SetTesting(bool state)
     {
         testing = state;
+    }
+
+    // To be caught, only called upon failure
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        base.OnCreateRoomFailed(returnCode, message);
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        base.OnJoinRoomFailed(returnCode, message);
+    }
+
+    public override void OnErrorInfo(ErrorInfo errorInfo)
+    {
+        base.OnErrorInfo(errorInfo);
     }
 }
 
