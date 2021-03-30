@@ -207,6 +207,7 @@ public class Shooting : MonoBehaviourPunCallbacks
     IEnumerator ShotgunDisable()
     {
         yield return new WaitForSeconds(PowerupTime);
+        displayShotgun(false);
         ShotgunEnable = false;
     }
 
@@ -218,6 +219,7 @@ public class Shooting : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(PowerupTime);
         CancelInvoke("MinigunShoot");
+        displayMinigun(false);
         MinigunEnable = false;
         shootAble = true;
     }
@@ -243,7 +245,6 @@ public class Shooting : MonoBehaviourPunCallbacks
         ShotgunEnable = true;
         displayShotgun(true);
         MinigunEnable = false;
-        displayMinigun(false);
         StartCoroutine(ShotgunDisable());
     }
 
@@ -258,7 +259,6 @@ public class Shooting : MonoBehaviourPunCallbacks
         MinigunEnable = true;
         displayMinigun(true);
         ShotgunEnable = false;
-        displayShotgun(false);
         StartCoroutine(MinigunDisable());
     }
     public void displayShotgun(bool state)
