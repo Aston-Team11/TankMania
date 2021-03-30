@@ -218,6 +218,7 @@ public class Lobby : MonoBehaviourPunCallbacks
     /// </summary>
     public void quit()
     {
+        GameObject.Destroy(GameObject.Find("Launcher"));
         PhotonNetwork.Disconnect();
         SceneManager.LoadScene(2, LoadSceneMode.Single);
     }
