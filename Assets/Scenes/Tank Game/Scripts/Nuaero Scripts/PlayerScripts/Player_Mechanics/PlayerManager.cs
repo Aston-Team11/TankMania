@@ -202,7 +202,13 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public void RespawnMe()
     {
         lives--;
-        
+        //deactivate all powerups 
+        shootClass.displayMinigun(false);
+        shootClass.displayShotgun(false);
+        var powerups = GetComponent<PlayerPowerupManager>();
+        powerups.PowerupAttained("");
+
+
         //update life across all clients only if this player is owned by this machine 
         if (photonView.IsMine && gameMode == 0)
         {

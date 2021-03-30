@@ -116,7 +116,7 @@ public class Manager : MonoBehaviourPunCallbacks
 
     public void BeginEndGame()
     {
-        photonView.RPC("EndGame", RpcTarget.All);
+        photonView.RpcSecure("EndGame",RpcTarget.AllViaServer,true);
     }
 
     [PunRPC]

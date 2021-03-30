@@ -13,7 +13,6 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
     [Header("Powerups")]
     [SerializeField] private GameObject shield;         //shield powerup
     private Slo_Motion slow;                            //slomotion powerup
-    //private bool slo;                                   //used to enable/disable slo motion
     private string powerUpType = "";                    //stores the current powerup as a string
     #endregion
 
@@ -32,7 +31,6 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
 
         if (powerUpType.Contains("SLOMO") && (Input.GetKeyDown(KeyCode.Space)))
         {
-            //slo = !slo;
             slow.Activate(true);
             powerUpType = "";
             displaySlowMo(false);

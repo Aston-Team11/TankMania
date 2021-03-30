@@ -54,6 +54,8 @@ public class Shooting : MonoBehaviourPunCallbacks
             if (shootAble && ShotgunEnable)
             {
                 shootAble = false;
+                //AudioSource for the tank shooting 
+                tank_shootingSound.Play();
                 // send shoot function for every player
                 photonView.RPC("Shotgun", RpcTarget.All);
 
@@ -65,6 +67,8 @@ public class Shooting : MonoBehaviourPunCallbacks
             else if (shootAble && MinigunEnable)
             {
                 shootAble = false;
+                //AudioSource for the tank shooting 
+                tank_shootingSound.Play();
                 //triggers mingun shooting every 0.1 seconds 
                 InvokeRepeating("MinigunShoot", 0f, 0.15f);
                 StartCoroutine(MinigunDisable());
@@ -74,6 +78,8 @@ public class Shooting : MonoBehaviourPunCallbacks
             else if (shootAble)
             {
                 shootAble = false;
+                //AudioSource for the tank shooting 
+                tank_shootingSound.Play();
                 // send shoot function for every player
                 photonView.RPC("Shoot", RpcTarget.All, false);
       
@@ -96,7 +102,6 @@ public class Shooting : MonoBehaviourPunCallbacks
     /// </summary>
     private void MinigunShoot()
     {
-        
         photonView.RPC("Shoot", RpcTarget.All, true);
     }
 
@@ -128,9 +133,6 @@ public class Shooting : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Shoot(bool minigunPower)
     {
-        //AudioSource for the tank shooting 
-        tank_shootingSound.Play();
-
         var bullet = Instantiate(theBullet, transform.position, transform.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
@@ -159,8 +161,6 @@ public class Shooting : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Shotgun()
     {
-        //AudioSource for the tank shooting 
-        tank_shootingSound.Play();
 
         //creating the bullets
         var bullet = Instantiate(theBullet, transform.position, top.transform.rotation);
@@ -230,7 +230,6 @@ public class Shooting : MonoBehaviourPunCallbacks
     /// </summary>
     public void SetShoot(bool val)
     {
-       
         shootAble = val;
     }
 
@@ -264,10 +263,12 @@ public class Shooting : MonoBehaviourPunCallbacks
     public void displayShotgun(bool state)
     {
         shotgunPic.SetActive(state);
+        ShotgunEnable = state;
     }
 
     public void displayMinigun(bool state)
     {
         minigunPic.SetActive(state);
+        MinigunEnable = state;
     }
 }
