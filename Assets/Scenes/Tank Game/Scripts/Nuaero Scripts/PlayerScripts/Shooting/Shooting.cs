@@ -27,6 +27,7 @@ public class Shooting : MonoBehaviourPunCallbacks
     [SerializeField] private bool MinigunEnable = false;
     [SerializeField] private float PowerupTime = 15f;
     [SerializeField] private Transform fpRight, fpLeft;
+    [SerializeField] private GameObject shotgunPic, minigunPic;
 
 
     /// <summary>
@@ -206,6 +207,7 @@ public class Shooting : MonoBehaviourPunCallbacks
     IEnumerator ShotgunDisable()
     {
         yield return new WaitForSeconds(PowerupTime);
+        displayShotgun(false);
         ShotgunEnable = false;
     }
 
@@ -217,6 +219,7 @@ public class Shooting : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(PowerupTime);
         CancelInvoke("MinigunShoot");
+        displayMinigun(false);
         MinigunEnable = false;
         shootAble = true;
     }
@@ -240,6 +243,7 @@ public class Shooting : MonoBehaviourPunCallbacks
         StopAllCoroutines();
         shootAble = true;
         ShotgunEnable = true;
+        displayShotgun(true);
         MinigunEnable = false;
         StartCoroutine(ShotgunDisable());
     }
@@ -253,8 +257,17 @@ public class Shooting : MonoBehaviourPunCallbacks
         StopAllCoroutines();
         shootAble = true;
         MinigunEnable = true;
+        displayMinigun(true);
         ShotgunEnable = false;
         StartCoroutine(MinigunDisable());
     }
+    public void displayShotgun(bool state)
+    {
+        shotgunPic.SetActive(state);
+    }
 
+    public void displayMinigun(bool state)
+    {
+        minigunPic.SetActive(state);
+    }
 }
