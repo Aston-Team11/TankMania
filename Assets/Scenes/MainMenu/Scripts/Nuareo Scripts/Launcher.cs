@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;           // To be changed over
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 /// <summary>
 /// @author Balraj Bains, Riyad K Rahman<br></br>
@@ -168,16 +168,29 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
+        string failure = "Connection Failed!\nPlease try again\n" + returnCode + ", " + message;
+        GameObject failurebox = GameObject.FindGameObjectWithTag("ConnectFailure");
+        failurebox.GetComponent<Text>().text = failure;
+        failurebox.SetActive(true);
         base.OnCreateRoomFailed(returnCode, message);
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        base.OnJoinRoomFailed(returnCode, message);
+        //base.OnJoinRoomFailed(returnCode, message);
+        string failure = "Connection Failed!\nPlease try again\n" + returnCode + ", " + message;
+        GameObject failurebox = GameObject.FindGameObjectWithTag("ConnectFailure");
+        failurebox.GetComponent<Text>().text = failure;
+       // failurebox.SetActive(true);
+        
     }
 
     public override void OnErrorInfo(ErrorInfo errorInfo)
     {
+        string failure = "Connection Failed!\nPlease try again\n" + errorInfo;
+        GameObject failurebox = GameObject.FindGameObjectWithTag("ConnectFailure");
+        failurebox.GetComponent<Text>().text = failure;
+        failurebox.SetActive(true);
         base.OnErrorInfo(errorInfo);
     }
 }
