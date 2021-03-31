@@ -133,7 +133,7 @@ public class Lobby : MonoBehaviourPunCallbacks
         }
 
         //sent to everyone
-        photonView.RpcSecure("SyncReady",RpcTarget.AllBuffered,ready, myplayer.GetPhotonView().ViewID);
+        photonView.RpcSecure("SyncReady",RpcTarget.AllBuffered,true,ready, myplayer.GetPhotonView().ViewID);
     }
 
     /// <summary>

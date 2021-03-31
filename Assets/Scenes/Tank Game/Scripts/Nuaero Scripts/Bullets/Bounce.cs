@@ -116,7 +116,7 @@ public class Bounce : MonoBehaviourPunCallbacks
             PlayerManager playerhit = collision.transform.root.gameObject.GetComponent<PlayerManager>();
             float playerhitHealth = playerhit.GetHealth();
 
-            if (playerhitHealth < 11 && playerhitHealth > -10) {
+            if (playerhitHealth <= 10) {
 
                 int killvalue = 0;
                 

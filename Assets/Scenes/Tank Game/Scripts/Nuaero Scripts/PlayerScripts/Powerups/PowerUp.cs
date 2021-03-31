@@ -115,6 +115,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
         }
 
         int result = Random.Range(1, MaxRange);
+        result = 5;
 
         switch (result)
         {

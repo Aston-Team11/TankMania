@@ -36,7 +36,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject mouseTarget;                // mouse reticle object
     [SerializeField] private mouseTargetSwivel mouseClass;          // handles swiveling top of tank
     [SerializeField] private PredictTrajectory trajectoryClass;   // handles aiming
-    [SerializeField] private Shooting shootClass { get; set; }                // handles swiveling top of tank
+    [SerializeField] private Shooting shootClass;               // handles swiveling top of tank
     #endregion 
 
     #region Respawn
@@ -216,21 +216,23 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public void RespawnMe()
     {
         lives--;
-        //deactivate all powerups for shooting
-        shootClass.ResetPowerups();
-        //disable all icons and powerups in powerups manager
-        var powerups = GetComponent<PlayerPowerupManager>();
-        powerups.PowerupAttained("");
-        powerups.displayShotgun(false);
-        powerups.displayMinigun(false);
-
-
-        //update life across all clients only if this player is owned by this machine 
-        if (photonView.IsMine && gameMode == 0)
+        if (photonView.IsMine )
         {
-            SharedStats.ChangeLives(order - 1, lives);
+            //deactivate all powerups for shooting
+            //shootClass.ResetPowerups();
+            //disable all icons and powerups in powerups manager
+            var powerups = GetComponent<PlayerPowerupManager>();
+            powerups.PowerupAttained("");
+            powerups.displayShotgun(false);
+            powerups.displayMinigun(false);
+
+            //update life across all clients only if this player is owned by this machine 
+            if (gameMode == 0)
+            {
+                SharedStats.ChangeLives(order - 1, lives);
+            }
+
         }
-        
 
         if (lives > 0)
         {
@@ -537,11 +539,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public Shooting GetShootClass() {
         return shootClass;
-    }
-
-    public void SetShootClass(Shooting myshootingclass)
-    {
-        shootClass = myshootingclass;
     }
 
     public InGameMenusManager GetSharedStats()
