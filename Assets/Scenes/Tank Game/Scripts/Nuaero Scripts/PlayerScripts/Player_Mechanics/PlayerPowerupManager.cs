@@ -14,7 +14,7 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject shield;         //shield powerup
     private Slo_Motion slow;                            //slomotion powerup
     private string powerUpType = "";                    //stores the current powerup as a string
-    private bool SpacePressed;
+    private bool SpacePressed = false;
     #endregion
 
     #region Player UI
@@ -32,6 +32,9 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
       
         if (Input.GetKeyDown(KeyCode.Space)) {
             SpacePressed = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.Space)){
+            SpacePressed = false;
         }
 
         if (powerUpType.Contains("SLOMO") && SpacePressed)
@@ -51,7 +54,7 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
             }
         }
 
-        else if (powerUpType.Contains("HealthUp") && (Input.GetKeyDown(KeyCode.Space)))
+        else if (powerUpType.Contains("HealthUp") && (SpacePressed))
         {
             //add 10 to the health 
             this.GetComponent<PlayerManager>().AddHealth(50.0f);
