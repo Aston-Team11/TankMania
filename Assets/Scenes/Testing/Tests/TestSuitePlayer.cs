@@ -47,7 +47,7 @@ namespace Tests
             yield return new WaitForSeconds(5f);
             Vector3 pos = new Vector3(-8.44f, 0.5f, 3.4f);
             Quaternion rot = new Quaternion(0f, 0f, 0f, 0f);
-            this.player = PhotonNetwork.Instantiate("Player_1", pos, rot);  //assigns the player to a new player gameobject 
+            this.player = PhotonNetwork.Instantiate("Player_2", pos, rot);  //assigns the player to a new player gameobject 
             this.playerManagerstats = this.player.GetComponent<PlayerManager>();   //assigns the player manager component of the new player 
             Assert.IsNotNull(this.player);
         }

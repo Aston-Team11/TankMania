@@ -27,11 +27,11 @@ public class Shooting : MonoBehaviourPunCallbacks
     [SerializeField] private bool MinigunEnable = false;
     [SerializeField] private float PowerupTime = 15f;
     [SerializeField] private Transform fpRight, fpLeft;
-    [SerializeField] private GameObject shotgunPic, minigunPic;
+   
 
 
     /// <summary>
-    /// @author Mumin
+    /// @author Mumininoor <br></br>
     /// play sound when tank shoots
     /// </summary>
     public void Start()
@@ -68,8 +68,6 @@ public class Shooting : MonoBehaviourPunCallbacks
             {
                 shootAble = false;
                 //AudioSource for the tank shooting 
-                tank_shootingSound.Play();
-                //triggers mingun shooting every 0.1 seconds 
                 InvokeRepeating("MinigunShoot", 0f, 0.15f);
                 StartCoroutine(MinigunDisable());
                 muzzleFlash.Play();
@@ -102,6 +100,8 @@ public class Shooting : MonoBehaviourPunCallbacks
     /// </summary>
     private void MinigunShoot()
     {
+        tank_shootingSound.Play();
+        //triggers mingun shooting every 0.1 seconds 
         photonView.RPC("Shoot", RpcTarget.All, true);
     }
 
@@ -161,7 +161,6 @@ public class Shooting : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Shotgun()
     {
-
         //creating the bullets
         var bullet = Instantiate(theBullet, transform.position, top.transform.rotation);
         var bullet2 = Instantiate(theBullet, fpLeft.position, top.transform.rotation);
@@ -204,10 +203,9 @@ public class Shooting : MonoBehaviourPunCallbacks
     /// disables shotgun powerup after a certian timed has passed 
     /// </summary>
 
-    IEnumerator ShotgunDisable()
+    public IEnumerator ShotgunDisable()
     {
         yield return new WaitForSeconds(PowerupTime);
-        displayShotgun(false);
         ShotgunEnable = false;
     }
 
@@ -215,11 +213,10 @@ public class Shooting : MonoBehaviourPunCallbacks
     /// @author Lerai Foulkes <br></br>
     /// disables minigun powerup after a certian timed has passed 
     /// </summary>
-    IEnumerator MinigunDisable()
+    public IEnumerator MinigunDisable()
     {
         yield return new WaitForSeconds(PowerupTime);
         CancelInvoke("MinigunShoot");
-        displayMinigun(false);
         MinigunEnable = false;
         shootAble = true;
     }
@@ -242,7 +239,6 @@ public class Shooting : MonoBehaviourPunCallbacks
         StopAllCoroutines();
         shootAble = true;
         ShotgunEnable = true;
-        displayShotgun(true);
         MinigunEnable = false;
         StartCoroutine(ShotgunDisable());
     }
@@ -256,19 +252,15 @@ public class Shooting : MonoBehaviourPunCallbacks
         StopAllCoroutines();
         shootAble = true;
         MinigunEnable = true;
-        displayMinigun(true);
         ShotgunEnable = false;
         StartCoroutine(MinigunDisable());
     }
-    public void displayShotgun(bool state)
+
+    public void ResetPowerups()
     {
-        shotgunPic.SetActive(state);
-        ShotgunEnable = state;
+        ShotgunEnable = false;
+        MinigunEnable = false;
+        CancelInvoke();
     }
 
-    public void displayMinigun(bool state)
-    {
-        minigunPic.SetActive(state);
-        MinigunEnable = state;
-    }
 }

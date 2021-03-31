@@ -18,7 +18,7 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
 
     #region Player UI
     [Header("Player UI")]
-    [SerializeField] private GameObject shieldPic, slowMoPic;   //Icons on canvas to indicate which powerup the player has 
+    [SerializeField] private GameObject shieldPic, slowMoPic,Healthup, shotgunPic, minigunPic;   //Icons on canvas to indicate which powerup the player has 
     #endregion
 
     /// <summary>
@@ -44,6 +44,13 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
                 photonView.RPC("spawnShield", RpcTarget.AllBufferedViaServer);
                 displayShield(false);
             }
+        }
+
+        else if (powerUpType.Contains("HealthUp") && (Input.GetKeyDown(KeyCode.Space)))
+        {
+            //add 10 to the health 
+            this.GetComponent<PlayerManager>().AddHealth(50.0f);
+            displayHealthUP(false);
         }
     }
 
@@ -72,6 +79,7 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
 
         displayShield(false);
         displaySlowMo(false);
+        displayHealthUP(false);
 
         if (powerUpType == "SHIELD")
         {
@@ -83,10 +91,7 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         }
         else if (powerUpType == "HealthUp")
         {
-            //add 10 to the health 
-            this.GetComponent<PlayerManager>().AddHealth(10.0f);
-
-            //issue with not syncing with the health bar 
+            displayHealthUP(true);
         }
         else if (powerUpType == "AdditionalLife")
         {
@@ -96,11 +101,14 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         else if (powerType == "Shotgun")
         {
             transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Shooting>().SetShotgun();
-
+            displayShotgun(true);
+            StartCoroutine(DisableShootingPowerUp(shotgunPic));
         }
         else if (powerType == "Minigun")
         {
             transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Shooting>().SetMinigun();
+            displayMinigun(true);
+            StartCoroutine(DisableShootingPowerUp(minigunPic));
         }
     }
 
@@ -120,9 +128,31 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         slowMoPic.SetActive(state);
     }
 
+    public void displayHealthUP(bool state)
+    {
+        Healthup.SetActive(state);
+    }
+
+    public void displayShotgun(bool state)
+    {
+        shotgunPic.SetActive(state);
+    }
+
+    public void displayMinigun(bool state)
+    {
+        minigunPic.SetActive(state);
+    }
+
+
     public GameObject getShield()
     {
         return shield;
+    }
+
+    private IEnumerator DisableShootingPowerUp(GameObject Shootingpowerup)
+    {
+        yield return new WaitForSeconds(15f);
+        Shootingpowerup.SetActive(false);
     }
 
 }

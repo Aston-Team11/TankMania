@@ -101,7 +101,7 @@ public class InGameMenus : MonoBehaviourPunCallbacks
     }
 
 
-    public void DeductLives(int playerID, int lives)
+    public void ChangeLives(int playerID, int lives)
     {
         photonView.RPC("SyncLives", RpcTarget.AllBuffered, playerID, lives);
     }

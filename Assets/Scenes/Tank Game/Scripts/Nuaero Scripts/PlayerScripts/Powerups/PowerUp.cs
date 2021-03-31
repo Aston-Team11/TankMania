@@ -129,8 +129,7 @@ public class PowerUp : MonoBehaviourPunCallbacks
                 break;
 
             case 3:
-                // player.SendMessage("PowerupAttained", "HealthUp");
-                player.SendMessage("PowerupAttained", "Minigun");
+                player.SendMessage("PowerupAttained", "HealthUp");
                 Debug.Log("Health up by 10 ");
                 break;
 

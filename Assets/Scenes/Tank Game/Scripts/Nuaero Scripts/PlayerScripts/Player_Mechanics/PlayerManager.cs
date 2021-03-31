@@ -133,6 +133,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
+    ///  @author Riyad K Rahman <br></br>
     /// checks player's health every frame 
     /// </summary>
     private void Update()
@@ -144,7 +145,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     }
 
-    //handles respawning and its animation
+    /// <summary>
+    ///  @author Riyad K Rahman <br></br>
+    ///  handles respawning and its animation
+    /// </summary>
     private void FixedUpdate()
     {
 
@@ -202,17 +206,19 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public void RespawnMe()
     {
         lives--;
-        //deactivate all powerups 
-        shootClass.displayMinigun(false);
-        shootClass.displayShotgun(false);
+        //deactivate all powerups for shooting
+        shootClass.ResetPowerups();
+        //disable all icons and powerups in powerups manager
         var powerups = GetComponent<PlayerPowerupManager>();
         powerups.PowerupAttained("");
+        powerups.displayShotgun(false);
+        powerups.displayMinigun(false);
 
 
         //update life across all clients only if this player is owned by this machine 
         if (photonView.IsMine && gameMode == 0)
         {
-            SharedStats.DeductLives(order - 1, lives);
+            SharedStats.ChangeLives(order - 1, lives);
         }
         
 
@@ -438,11 +444,17 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public void AddHealth(float inc)
     {
         //if increment wont go past max health then apply it
-        if (photonView.IsMine && !(health + inc > 100))
-        {
-            health += inc;
-            photonView.RPC("shareMyHealth", RpcTarget.AllBuffered, health);
-        }
+        if (photonView.IsMine)
+            if(!(health + inc > 100))
+            {
+                health += inc;
+                photonView.RPC("shareMyHealth", RpcTarget.AllBuffered, health);
+            }
+            else
+            {
+                health = 100;
+                photonView.RPC("shareMyHealth", RpcTarget.AllBuffered, health);
+            }
     }
 
     /// <summary>
@@ -451,7 +463,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void AddLife()
     {
-        lives = lives + 1;
+        if (photonView.IsMine)
+        {
+            lives = lives + 1;
+            SharedStats.ChangeLives(order - 1, lives);
+        }
+       
     }
 
 

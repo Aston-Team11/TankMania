@@ -128,4 +128,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac390cc91d9f64d4c93f28e212ba15d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: -0.85, y: 15, z: -2.130001}
+  offset: {x: -0.85, y: 20, z: -2.130001}
