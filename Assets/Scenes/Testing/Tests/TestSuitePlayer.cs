@@ -36,7 +36,7 @@ namespace Tests
         /// This is also the very first test and therefore will handle loading the level and spawning a player in the scene
         /// </summary>
         [UnityTest]
-        public IEnumerator InstantiatePlayer_Enumerator()
+        public IEnumerator A1_InstantiatePlayer_Enumerator()
         {
 
             //waits 5 seconds before creating a room 
@@ -53,7 +53,7 @@ namespace Tests
         }
 
         [UnityTest]
-        public IEnumerator PlayerDamage_Enumerator()
+        public IEnumerator A2_PlayerDamage_Enumerator()
         {
             // Use the Assert class to test conditions.
             // Use yield to skip a frame.
@@ -63,7 +63,7 @@ namespace Tests
         }
 
         [UnityTest]
-        public IEnumerator PlayerGamemodeCheck_FFA_Enumerator()
+        public IEnumerator A3_PlayerGamemodeCheck_FFA_Enumerator()
         {
             // Use the Assert class to test conditions.
             // Use yield to skip a frame.
@@ -78,7 +78,7 @@ namespace Tests
         /// </summary>
         /// <returns></returns>
         [UnityTest]
-        public IEnumerator PlayerMove_Enumerator()
+        public IEnumerator A4_PlayerMove_Enumerator()
         {
             // Use the Assert class to test conditions.
             // Use yield to skip a frame.
@@ -92,7 +92,7 @@ namespace Tests
             this.player.GetComponent<PlayerMovement>().direction.x = -15;
 
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
 
             if (this.player.transform.rotation.y < initialrot)
             {
@@ -104,15 +104,110 @@ namespace Tests
             }
         }
 
-      // [Category ("dc")]
-      // [UnityTest]
-      // public IEnumerator Disconnect()
-      // {
-      //     PhotonNetwork.Disconnect();
-      //     yield return new WaitForSeconds(5f);
-      //
-      //     Assert.IsTrue(PhotonNetwork.IsConnected);
-      //
-      // }
+        [UnityTest]
+        public IEnumerator A5_PlayerShooting()
+        {
+            yield return null;
+            this.player.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<PhotonView>().RPC("Shoot", RpcTarget.All, false);
+            yield return new WaitForEndOfFrame();
+            Assert.IsNotNull(GameObject.FindGameObjectWithTag("Bullet"));
+            GameObject.Destroy(GameObject.FindGameObjectWithTag("Bullet"));
+        }
+
+        [UnityTest]
+        public IEnumerator A6_AdditionalLife()
+        {
+            yield return null;
+            this.playerManagerstats.AddLife();
+            yield return new WaitForEndOfFrame();
+            Assert.AreEqual(this.playerManagerstats.GetPlayerLives(),1001);
+        }
+
+        [UnityTest]
+        public IEnumerator A7_HealthUp()
+        {
+            yield return null;
+            this.playerManagerstats.AddHealth(50);
+            yield return new WaitForEndOfFrame();
+            Assert.AreEqual(90, this.playerManagerstats.GetHealth()); 
+        }
+        [UnityTest]
+        public IEnumerator A8_Shotgun()
+        {
+            yield return null;
+            this.player.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<PhotonView>().RPC("Shotgun", RpcTarget.All);
+            yield return new WaitForEndOfFrame();
+            Assert.AreEqual(GameObject.FindGameObjectsWithTag("Bullet").Length,3);
+        }
+        [UnityTest]
+        public IEnumerator A9_Minigun()
+        {
+            yield return new WaitForSeconds(2f);
+            for (int i = 0; i < 5; i++) { this.player.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<PhotonView>().RPC("Shoot", RpcTarget.All, true); }
+            
+            Assert.IsTrue(GameObject.FindGameObjectsWithTag("Bullet").Length > 3);
+        }
+
+        [UnityTest]
+        public IEnumerator B1_Shield()
+        {
+            yield return null;
+            this.player.GetComponent<PhotonView>().RPC("spawnShield", RpcTarget.All);
+            yield return new WaitForEndOfFrame();
+            Assert.IsTrue(this.player.transform.GetChild(1).gameObject.activeSelf);
+        }
+
+     /*   [UnityTest]
+        public IEnumerator B2_Slowmo()
+        {
+            // RIYAD
+            yield return null;
+            this.player.GetComponent<PlayerPowerupManager>().PowerupAttained("SLOMO");
+            this.player.GetComponent<PlayerPowerupManager>().setSpacePressed(true);
+            yield return new WaitForEndOfFrame();
+            Assert.IsTrue(Time.timeScale != 1);
+        }*/
+
+
+
+
+        [UnityTest]
+        public IEnumerator B3_ZombieSpawnersInit()
+        {
+            yield return null;
+            GameObject.FindGameObjectWithTag("EnemySpawn").GetComponent<Spawner>();
+            Assert.AreEqual(GameObject.FindGameObjectWithTag("EnemySpawn").GetComponent<Spawner>().spawners.Length, 5);
+        }
+
+        [UnityTest]
+        public IEnumerator B4_ZombiesInit()
+        {
+            yield return null;
+            Assert.AreEqual(GameObject.FindGameObjectWithTag("EnemySpawn").GetComponent<Spawner>().getRemaining(), 5);
+        }
+        [UnityTest]
+        public IEnumerator B5_KillsCounter()
+        {
+            yield return null;
+            this.playerManagerstats.AddKill(1,1);
+            yield return new WaitForSeconds(1);
+            Assert.AreEqual(1, this.playerManagerstats.GetKill());
+        }
+
+
+
+
+
+
+        // [Category ("dc")]
+        // [UnityTest]
+        // public IEnumerator Disconnect()
+        // {
+        //     PhotonNetwork.Disconnect();
+        //     yield return new WaitForSeconds(5f);
+        //
+        //     Assert.IsTrue(PhotonNetwork.IsConnected);
+        //
+        // }
     }
 }

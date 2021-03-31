@@ -29,7 +29,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject mouseTarget;                // mouse reticle object
     [SerializeField] private mouseTargetSwivel mouseClass;          // handles swiveling top of tank
     [SerializeField] private PredictTrajectory trajectoryClass;   // handles aiming
-    [SerializeField] private Shooting shootClass;                // handles swiveling top of tank
+    [SerializeField] private Shooting shootClass { get; set; }                // handles swiveling top of tank
     #endregion 
 
     #region Respawn
@@ -524,6 +524,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         return pve;
     }
+
+    public Shooting getShootClass() {
+        return shootClass;
+    }
 }
+
 
 

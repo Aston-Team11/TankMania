@@ -14,6 +14,7 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject shield;         //shield powerup
     private Slo_Motion slow;                            //slomotion powerup
     private string powerUpType = "";                    //stores the current powerup as a string
+    private bool SpacePressed;
     #endregion
 
     #region Player UI
@@ -28,15 +29,18 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
     void Update()
     {
         if (!photonView.IsMine) return;
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            SpacePressed = true;
+        }
 
-        if (powerUpType.Contains("SLOMO") && (Input.GetKeyDown(KeyCode.Space)))
+        if (powerUpType.Contains("SLOMO") && SpacePressed)
         {
             slow.Activate(true);
             powerUpType = "";
             displaySlowMo(false);
         }
 
-        else if (powerUpType.Contains("SHIELD") && (Input.GetKeyDown(KeyCode.Space)))
+        else if (powerUpType.Contains("SHIELD") && SpacePressed)
         {
             // only allow it to be active if it is turned off
             if (!(shield.activeSelf))
@@ -155,4 +159,5 @@ public class PlayerPowerupManager : MonoBehaviourPunCallbacks
         Shootingpowerup.SetActive(false);
     }
 
+    public void setSpacePressed(bool state) { SpacePressed = state; }
 }
