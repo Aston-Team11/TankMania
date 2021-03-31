@@ -5982,7 +5982,6 @@ MonoBehaviour:
     type: 3}
   mouseClass: {fileID: 7376776243642368894}
   trajectoryClass: {fileID: 3772516234840391495}
-  shootClass: {fileID: 4870387565770143216}
   lives: 10
   Balloon: {fileID: 2752678568320650329}
   livesText: {fileID: 6223515408272339217}

@@ -5,15 +5,22 @@ using Photon.Pun;
 using System;
 using UnityEngine.UI;
 
+/// <summary>
+/// @author Riyad K Rahman <br></br>
+/// handles syncing of this player to other machines and  keeps track of health 
+/// </summary>
 public class PlayerManager : MonoBehaviourPunCallbacks
-{   
+{
+    #region System
+    [Header("System and syncing")]
     [SerializeField] private int order;                             //used to sort players in lists (for zombie spawner targeting)
     private int gameMode;                                          //the current gamemode selceted affects which UI elements are displayed 
     [SerializeField] private GameObject MySystem;                  //handles ending the game
-    private InGameMenus SharedStats;                        
+    private InGameMenusManager SharedStats;                        
     [SerializeField] private GameObject pve, ffa;                   //two different UI setups
     [SerializeField] private Text ffaKills;                         //killCount in UI
     private GameObject SpawnPoints;                                 //holds different spawn points a player can spawn from 
+    #endregion
 
     #region Health
     [Header("Health Management")]
@@ -49,7 +56,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     #endregion
 
 
-
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// Intialses important variables when this player is first spawned 
+    /// </summary>
     public void Start()
     {
         SetName();
@@ -59,7 +69,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             setMouse();
            MySystem = GameObject.Find("----SYSTEMS----");
-            SharedStats = GameObject.FindGameObjectWithTag("SharedStats").GetComponent<InGameMenus>();
+            SharedStats = GameObject.FindGameObjectWithTag("SharedStats").GetComponent<InGameMenusManager>();
             ActivateHealth();
         }
 
@@ -534,7 +544,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         shootClass = myshootingclass;
     }
 
-    public InGameMenus GetSharedStats()
+    public InGameMenusManager GetSharedStats()
     {
         return SharedStats;
     }

@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 
-public class InGameMenus : MonoBehaviourPunCallbacks
+/// <summary>
+/// @author Riyad K Rahman <br></br>
+/// handles displaying game menus depending on player input and managing the data for each menu canvas
+/// </summary>
+public class InGameMenusManager : MonoBehaviourPunCallbacks
 {
     private static bool GameIsPaused = false;
     private int gameMode;
@@ -26,7 +30,10 @@ public class InGameMenus : MonoBehaviourPunCallbacks
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// @author Balraj Bains,Riyad K Rahman <br></br>
+    /// shows an appropraite menu screen depending on the input and the current gamemode 
+    /// </summary>
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -61,22 +68,30 @@ public class InGameMenus : MonoBehaviourPunCallbacks
         }
     }
 
-    public void Resume()
-
+    /// <summary>
+    /// @author Balraj Bains <br></br>
+    /// hides pause menu screen
+    /// </summary>
+    private void Resume()
     {
         pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
         GameIsPaused = false;
     }
 
-    void Pause()
-
+    /// <summary>
+    /// @author Balraj Bains <br></br>
+    /// shows pause menu screen
+    /// </summary>
+    private void Pause()
     {
         pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
         GameIsPaused = true;
     }
 
+    /// <summary>
+    /// @author Balraj Bains <br></br>
+    /// takes user back to main menu screen and disconnects player from the network
+    /// </summary>
     public void LoadMenu()
     {
         Destroy(GameObject.Find("Launcher"));
@@ -84,28 +99,47 @@ public class InGameMenus : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect();
     }
 
+    /// <summary>
+    /// @author Balraj Bains <br></br>
+    /// Exits the entire application 
+    /// </summary>
     public void ExitGame()
     {
         Application.Quit();
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// Add a kill for the player who matches the player id
+    /// </summary>
     public void AddKills(int playerID , int killcount)
     {
         photonView.RPC("SyncKillCount", RpcTarget.AllBuffered, playerID, killcount);
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// Sync kills for all players 
+    /// </summary>
     [PunRPC]
     private void SyncKillCount(int playerID, int killcount)
     {
         sharedPlayerstats[playerID] = killcount;
     }
 
-
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// Set lives for the player who matches the player id
+    /// </summary>
     public void ChangeLives(int playerID, int lives)
     {
         photonView.RPC("SyncLives", RpcTarget.AllBuffered, playerID, lives);
     }
 
+    /// <summary>
+    /// @author Riyad K Rahman <br></br>
+    /// Sync lives for all players 
+    /// </summary>
     [PunRPC]
     private void SyncLives(int playerID, int lives)
     {

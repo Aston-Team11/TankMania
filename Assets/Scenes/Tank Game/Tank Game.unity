@@ -3084,7 +3084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 0
 --- !u!114 &117865170
 MonoBehaviour:
@@ -10143,7 +10143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 1
 --- !u!114 &504660455
 MonoBehaviour:
@@ -20694,7 +20694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 2
 --- !u!114 &1133509438
 MonoBehaviour:
@@ -29346,7 +29346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 3
 --- !u!114 &1537412757
 MonoBehaviour:
@@ -40064,7 +40064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 3
 --- !u!224 &5291850266072192333
 RectTransform:
@@ -40217,7 +40217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 0
 --- !u!114 &5291850266460603784
 MonoBehaviour:
@@ -40389,7 +40389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 1
 --- !u!222 &5291850266841144517
 CanvasRenderer:
@@ -40794,7 +40794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66192d19d0bdcf04eac96981bf7a3aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 1777527055}
+  SharedplayerStats: {fileID: 1777527055}
   playerNum: 2
 --- !u!1001 &5408355045031914884
 PrefabInstance:
