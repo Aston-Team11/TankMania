@@ -34,7 +34,7 @@ public class SelectGameMode : MonoBehaviourPunCallbacks
         if (!photonView.IsMine) { return;  }
        
         gamestate = !gamestate;
-        photonView.RPC("SyncGameState", RpcTarget.AllBuffered, gamestate);
+        photonView.RpcSecure("SyncGameState", RpcTarget.AllBuffered, true ,gamestate);
 
     }
 

@@ -75,7 +75,11 @@ public class PowerupSpawner : MonoBehaviourPunCallbacks
     {
        var box = PhotonNetwork.Instantiate(powerBox.name, spawners[spawnerId].transform.position, transform.rotation);
        box.GetComponent<PowerUp>().SetMySpawner(this.gameObject);
-       box.GetComponent<PowerUp>().SetMaxRange(7 - (gameMode * 2));   //if on ffa gamemode the add life and shotgun powerup are removed
+        if (gameMode == 1) {
+            box.GetComponent<PowerUp>().SetMaxRange(4);   //if on ffa gamemode the add life,shotgun and minigun powerup are removed
+        }
+
+     
        BoxCount++; 
     }
 
