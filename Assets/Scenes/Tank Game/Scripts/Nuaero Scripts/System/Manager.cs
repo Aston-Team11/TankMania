@@ -82,7 +82,7 @@ public class Manager : MonoBehaviourPunCallbacks
         else
         {
             //used for spawning host
-            newplayer = PhotonNetwork.Instantiate("Player_3", playerSpawns[gameMode].transform.GetChild(0).transform.position, playerSpawns[gameMode].transform.GetChild(0).transform.rotation);
+            newplayer = PhotonNetwork.Instantiate("Player_1", playerSpawns[gameMode].transform.GetChild(0).transform.position, playerSpawns[gameMode].transform.GetChild(0).transform.rotation);
            
             //used to inform players that a game session has already begun
             PhotonNetwork.Instantiate("GameInSession", transform.position, transform.rotation);

@@ -84,8 +84,7 @@ public class Launcher : MonoBehaviourPunCallbacks
                     CancelInvoke();
                 }
             }           
-        }
-       
+        }      
     }
 
     /// <summary>
@@ -95,7 +94,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public IEnumerator AwakeDelay()
     {
         yield return new WaitForSeconds(3); // Waits
-        //PhotonNetwork.AutomaticallySyncScene = true; // Sets options to always sync the scene to who is the Master client (Host)
+        //used to authenticate game versions of different game versions 
         PhotonNetwork.GameVersion = "1.0.0";
     }
 

@@ -11,7 +11,6 @@ using Photon.Pun;
         [SerializeField] private Transform target;      // the transform of the target to aim for
         public GameObject[] playerList;                 // a list of players
 
-
         [SerializeField] private float minimumDist; //edit this field to mkae the zombie change target
         [SerializeField] private float dist;
         [SerializeField] private int poisonCloudSpawnRate;
@@ -32,9 +31,10 @@ using Photon.Pun;
         /// @author Riyad K Rahman <br></br>
         /// Only to be used once when system gameobject spawns the first zombies
         /// </summary>
-        public void TargetPlayer1()
+        public void TargetPlayer()
         {
-            photonView.RPC("Retarget", RpcTarget.AllViaServer, "1004");
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            photonView.RPC("Retarget", RpcTarget.AllViaServer, player.GetComponent<PhotonView>().ViewID.ToString());
         }
 
 
@@ -260,5 +260,11 @@ using Photon.Pun;
                 PhotonNetwork.Destroy(this.photonView);
             }
         }
+
+        public Transform GetTarget()
+        {
+            return target;
+        }
+
     }
 

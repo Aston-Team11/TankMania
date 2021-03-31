@@ -59,7 +59,7 @@ public class Gamemode : MonoBehaviourPunCallbacks
         for (int i = 0; i < 5; i++)
         {
             var zombie = PhotonNetwork.Instantiate(Enemy, SpawnPointEnemy.position, SpawnPointEnemy.rotation);
-            zombie.GetComponent<AICharacterControl>().TargetPlayer1();
+            zombie.GetComponent<AICharacterControl>().TargetPlayer();
         }
     }
 

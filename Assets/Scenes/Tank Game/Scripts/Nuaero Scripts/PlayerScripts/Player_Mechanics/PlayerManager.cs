@@ -525,8 +525,18 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         return pve;
     }
 
-    public Shooting getShootClass() {
+    public Shooting GetShootClass() {
         return shootClass;
+    }
+
+    public void SetShootClass(Shooting myshootingclass)
+    {
+        shootClass = myshootingclass;
+    }
+
+    public InGameMenus GetSharedStats()
+    {
+        return SharedStats;
     }
 }
 
